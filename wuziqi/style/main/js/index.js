@@ -382,7 +382,7 @@ function board_grade(color,ix,iy)
 					{
 						if(chess_board[gx+','+(gy-2)] == 'white')
 						{
-							white *= 2;
+							white *= 4;
 
 							if(gy-3 < 0 || chess_board[gx+','+(gy-3)] == 'black')
 							{
@@ -390,21 +390,21 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[gx+','+(gy-3)] == 'white')
 							{
-								white *= 2;
+								white *= 6;
 
 								if(gy-4 < 0 || chess_board[gx+','+(gy-4)] == 'black')
 								{
-									white = 3;
+									white *= 2;
 								}
 								else if(chess_board[gx+','+(gy-4)] == 'white')
 								{
-									white *= 2;
+									white *= 8;
 								}
 							}
 						}
 						else
 						{
-							black *= 2;
+							black *= 4;
 
 							if(gy-3 < 0 || chess_board[gx+','+(gy-3)] == 'white')
 							{
@@ -412,15 +412,15 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[gx+','+(gy-3)] == 'black')
 							{
-								black *= 2;
+								black *= 6;
 
 								if(gy-4 < 0 || chess_board[gx+','+(gy-4)] == 'white')
 								{
-									black = 3;
+									black *= 2;
 								}
 								else if(chess_board[gx+','+(gy-4)] == 'black')
 								{
-									black *= 2;
+									black *= 8;
 								}
 							}
 						}
@@ -476,7 +476,7 @@ function board_grade(color,ix,iy)
 					{
 						if(chess_board[(gx+2)+','+(gy-2)] == 'white')
 						{
-							white *= 2;
+							white *= 4;
 
 							if((gx+3 > 14 && gy-3 < 0) || chess_board[(gx+3)+','+(gy-3)] == 'black')
 							{
@@ -484,21 +484,21 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[(gx+3)+','+(gy-3)] == 'white')
 							{
-								white *= 2;
+								white *= 6;
 
 								if((gx+4 > 14 && gy-4 < 0) || chess_board[(gx+4)+','+(gy-4)] == 'black')
 								{
-									white = 3;
+									white *= 2;
 								}
 								else if(chess_board[(gx+4)+','+(gy-4)] == 'white')
 								{
-									white *= 2;
+									white *= 8;
 								}
 							}
 						}
 						else
 						{
-							black *= 2;
+							black *= 4;
 
 							if((gx+3 > 14 && gy-3 < 0) || chess_board[(gx+3)+','+(gy-3)] == 'white')
 							{
@@ -506,15 +506,15 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[(gx+3)+','+(gy-3)] == 'black')
 							{
-								black *= 2;
+								black *= 6;
 
 								if((gx+4 > 14 && gy-4 < 0) || chess_board[(gx+4)+','+(gy-4)] == 'white')
 								{
-									black = 3;
+									black *= 2;
 								}
 								else if(chess_board[(gx+4)+','+(gy-4)] == 'black')
 								{
-									black *= 2;
+									black *= 8;
 								}
 							}
 						}
@@ -570,7 +570,7 @@ function board_grade(color,ix,iy)
 					{
 						if(chess_board[(gx+2)+','+gy] == 'white')
 						{
-							white *= 2;
+							white *= 4;
 
 							if(gx+3 > 14 || chess_board[(gx+3)+','+gy] == 'black')
 							{
@@ -578,21 +578,21 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[(gx+3)+','+gy] == 'white')
 							{
-								white *= 2;
+								white *= 6;
 
 								if(gx+4 > 14 || chess_board[(gx+4)+','+gy] == 'black')
 								{
-									white = 3;
+									white *= 2;
 								}
-							}
-							else if(chess_board[(gx+4)+','+gy] == 'white')
-							{
-								white *= 2;
+								else if(chess_board[(gx+4)+','+gy] == 'white')
+								{
+									white *= 8;
+								}
 							}
 						}
 						else
 						{
-							black *= 2;
+							black *= 4;
 
 							if(gx+3 > 14 || chess_board[(gx+3)+','+gy] == 'white')
 							{
@@ -600,15 +600,15 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[(gx+3)+','+gy] == 'black')
 							{
-								black *= 2;
+								black *= 6;
 
 								if(gx+4 > 14 || chess_board[(gx+4)+','+gy] == 'white')
 								{
-									black = 3;
+									black *= 2;
 								}
 								else if(chess_board[(gx+4)+','+gy] == 'black')
 								{
-									black *= 2;
+									black *= 8;
 								}
 							}
 						}
@@ -664,7 +664,7 @@ function board_grade(color,ix,iy)
 					{
 						if(chess_board[(gx+2)+','+(gy+2)] == 'white')
 						{
-							white *= 2;
+							white *= 4;
 
 							if((gx+3 > 14 && gy+3 > 14) || chess_board[(gx+3)+','+(gy+3)] == 'black')
 							{
@@ -672,21 +672,21 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[(gx+3)+','+(gy+3)] == 'white')
 							{
-								white *= 2;
+								white *= 6;
 
 								if((gx+4 > 14 && gy+4 > 14) || chess_board[(gx+4)+','+(gy+4)] == 'black')
 								{
-									white = 3;
+									white *= 2;
 								}
 								else if(chess_board[(gx+4)+','+(gy+4)] == 'white')
 								{
-									white *= 2;
+									white *= 8;
 								}
 							}
 						}
 						else
 						{
-							black *= 2;
+							black *= 4;
 
 							if((gx+3 > 14 && gy+3 > 14) || chess_board[(gx+3)+','+(gy+3)] == 'white')
 							{
@@ -694,15 +694,15 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[(gx+3)+','+(gy+3)] == 'black')
 							{
-								black *= 2;
+								black *= 6;
 
 								if((gx+4 > 14 && gy+4 > 14) || chess_board[(gx+4)+','+(gy+4)] == 'white')
 								{
-									black = 3;
+									black *= 2;
 								}
 								else if(chess_board[(gx+4)+','+(gy+4)] == 'black')
 								{
-									black *= 2;
+									black *= 8;
 								}
 							}
 						}
@@ -758,7 +758,7 @@ function board_grade(color,ix,iy)
 					{
 						if(chess_board[gx+','+(gy+2)] == 'white')
 						{
-							white *= 2;
+							white *= 4;
 
 							if(gy+3 > 14 || chess_board[gx+','+(gy+3)] == 'black')
 							{
@@ -766,21 +766,21 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[gx+','+(gy+3)] == 'white')
 							{
-								white *= 2;
+								white *= 6;
 
 								if(gy+4 > 14 || chess_board[gx+','+(gy+4)] == 'black')
 								{
-									white = 3;
+									white *= 2;
 								}
 								else if(chess_board[gx+','+(gy+4)] == 'white')
 								{
-									white *= 2;
+									white *= 8;
 								}
 							}
 						}
 						else
 						{
-							black *= 2;
+							black *= 4;
 
 							if(gy+3 > 14 || chess_board[gx+','+(gy+3)] == 'white')
 							{
@@ -788,15 +788,15 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[gx+','+(gy+3)] == 'black')
 							{
-								black *= 2;
+								black *= 6;
 
 								if(gy+4 > 14 || chess_board[gx+','+(gy+4)] == 'white')
 								{
-									black = 3;
+									black *= 2;
 								}
 								else if(chess_board[gx+','+(gy+4)] == 'black')
 								{
-									black *= 2;
+									black *= 8;
 								}
 							}
 						}
@@ -852,7 +852,7 @@ function board_grade(color,ix,iy)
 					{
 						if(chess_board[(gx-2)+','+(gy+2)] == 'white')
 						{
-							white *= 2;
+							white *= 4;
 
 							if((gx-3 < 0 && gy+3 > 14) || chess_board[(gx-3)+','+(gy+3)] == 'black')
 							{
@@ -860,21 +860,21 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[(gx-3)+','+(gy+3)] == 'white')
 							{
-								white *= 2;
+								white *= 6;
 
 								if((gx-4 < 0 && gy+4 > 14) || chess_board[(gx-4)+','+(gy+4)] == 'black')
 								{
-									white = 3;
+									white *= 2;
 								}
 								else if(chess_board[(gx-4)+','+(gy+4)] == 'white')
 								{
-									white *= 2;
+									white *= 8;
 								}
 							}
 						}
 						else
 						{
-							black *= 2;
+							black *= 4;
 
 							if((gx-3 < 0 && gy+3 > 14) || chess_board[(gx-3)+','+(gy+3)] == 'white')
 							{
@@ -882,15 +882,15 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[(gx-3)+','+(gy+3)] == 'black')
 							{
-								black *= 2;
+								black *= 6;
 
 								if((gx-4 < 0 && gy+4 > 14) || chess_board[(gx-4)+','+(gy+4)] == 'white')
 								{
-									black = 3;
+									black *= 2;
 								}
 								else if(chess_board[(gx-4)+','+(gy+4)] == 'black')
 								{
-									black *= 2;
+									black *= 8;
 								}
 							}
 						}
@@ -946,7 +946,7 @@ function board_grade(color,ix,iy)
 					{
 						if(chess_board[(gx-2)+','+gy] == 'white')
 						{
-							white *= 2;
+							white *= 4;
 
 							if(gx-3 < 0 || chess_board[(gx-3)+','+gy] == 'black')
 							{
@@ -954,21 +954,21 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[(gx-3)+','+gy] == 'white')
 							{
-								white *= 2;
+								white *= 6;
 
 								if(gx-4 < 0 || chess_board[(gx-4)+','+gy] == 'black')
 								{
-									white = 3;
+									white *= 2;
 								}
 								else if(chess_board[(gx-4)+','+gy] == 'white')
 								{
-									white *= 2;
+									white *= 8;
 								}
 							}
 						}
 						else
 						{
-							black *= 2;
+							black *= 4;
 
 							if(gx-3 < 0 || chess_board[(gx-3)+','+gy] == 'white')
 							{
@@ -976,15 +976,15 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[(gx-3)+','+gy] == 'black')
 							{
-								black *= 2;
+								black *= 6;
 
 								if(gx-4 < 0 || chess_board[(gx-4)+','+gy] == 'white')
 								{
-									black = 3;
+									black *= 2;
 								}
 								else if(chess_board[(gx-4)+','+gy] == 'black')
 								{
-									black *= 2;
+									black *= 8;
 								}
 							}
 						}
@@ -1040,7 +1040,7 @@ function board_grade(color,ix,iy)
 					{
 						if(chess_board[(gx-2)+','+(gy-2)] == 'white')
 						{
-							white *= 2;
+							white *= 4;
 
 							if((gx-3 < 0 && gy-3 < 0) || chess_board[(gx-3)+','+(gy-3)] == 'black')
 							{
@@ -1048,21 +1048,21 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[(gx-3)+','+(gy-3)] == 'white')
 							{
-								white *= 2;
+								white *= 6;
 
 								if((gx-4 < 0 && gy-4 < 0) || chess_board[(gx-4)+','+(gy-4)] == 'black')
 								{
-									white = 3;
+									white *= 2;
 								}
 								else if(chess_board[(gx-4)+','+(gy-4)] == 'white')
 								{
-									white *= 2;
+									white *= 8;
 								}
 							}
 						}
 						else
 						{
-							black *= 2;
+							black *= 4;
 
 							if((gx-3 < 0 && gy-3 < 0) || chess_board[(gx-3)+','+(gy-3)] == 'white')
 							{
@@ -1070,15 +1070,15 @@ function board_grade(color,ix,iy)
 							}
 							else if(chess_board[(gx-3)+','+(gy-3)] == 'black')
 							{
-								black *= 2;
+								black *= 6;
 
 								if((gx-4 < 0 && gy-4 < 0) || chess_board[(gx-4)+','+(gy-4)] == 'white')
 								{
-									black = 3;
+									black *= 2;
 								}
 								else if(chess_board[(gx-4)+','+(gy-4)] == 'black')
 								{
-									black *= 2;
+									black *= 8;
 								}
 							}
 						}
@@ -1090,7 +1090,7 @@ function board_grade(color,ix,iy)
 			}
 		}
 
-		// 存储活三冲四信息，必杀技
+		// 存储活三冲四以及中成信息，必杀技
 
 		var count = 1;
 		var end_0 = '';
@@ -1175,6 +1175,32 @@ function board_grade(color,ix,iy)
 				else
 				{
 					black_three = [end_0,end_1];
+				}
+
+				return true;
+			}
+			else if(end_0 != '' && chess_board[(Number(end_0.split(',')[0])-1)+','+iy] == color)
+			{
+				if(color == 'white')
+				{
+					white_final = end_0;
+				}
+				else
+				{
+					black_final = end_0;
+				}
+
+				return true;
+			}
+			else if(end_1 != '' && chess_board[(Number(end_1.split(',')[0])+1)+','+iy] == color)
+			{
+				if(color == 'white')
+				{
+					white_final = end_1;
+				}
+				else
+				{
+					black_final = end_1;
 				}
 
 				return true;
@@ -1270,6 +1296,32 @@ function board_grade(color,ix,iy)
 
 				return true;
 			}
+			else if(end_0 != '' && chess_board[(Number(end_0.split(',')[0])-1)+','+(Number(end_0.split(',')[1])-1)] == color)
+			{
+				if(color == 'white')
+				{
+					white_final = end_0;
+				}
+				else
+				{
+					black_final = end_0;
+				}
+
+				return true;
+			}
+			else if(end_1 != '' && chess_board[(Number(end_1.split(',')[0])+1)+','+(Number(end_1.split(',')[1])+1)] == color)
+			{
+				if(color == 'white')
+				{
+					white_final = end_1;
+				}
+				else
+				{
+					black_final = end_1;
+				}
+
+				return true;
+			}
 		}
 
 		if(count == 4)
@@ -1353,6 +1405,32 @@ function board_grade(color,ix,iy)
 				else
 				{
 					black_three = [end_0,end_1];
+				}
+
+				return true;
+			}
+			else if(end_0 != '' && chess_board[ix+','+(Number(end_0.split(',')[1])-1)] == color)
+			{
+				if(color == 'white')
+				{
+					white_final = end_0;
+				}
+				else
+				{
+					black_final = end_0;
+				}
+
+				return true;
+			}
+			else if(end_1 != '' && chess_board[ix+','+(Number(end_1.split(',')[1])+1)] == color)
+			{
+				if(color == 'white')
+				{
+					white_final = end_1;
+				}
+				else
+				{
+					black_final = end_1;
 				}
 
 				return true;
@@ -1444,6 +1522,32 @@ function board_grade(color,ix,iy)
 				else
 				{
 					black_three = [end_0,end_1];
+				}
+
+				return true;
+			}
+			else if(end_0 != '' && chess_board[(Number(end_0.split(',')[0])-1)+','+(Number(end_0.split(',')[1])+1)] == color)
+			{
+				if(color == 'white')
+				{
+					white_final = end_0;
+				}
+				else
+				{
+					black_final = end_0;
+				}
+
+				return true;
+			}
+			else if(end_1 != '' && chess_board[(Number(end_1.split(',')[0])+1)+','+(Number(end_1.split(',')[1])-1)] == color)
+			{
+				if(color == 'white')
+				{
+					white_final = end_1;
+				}
+				else
+				{
+					black_final = end_1;
 				}
 
 				return true;
