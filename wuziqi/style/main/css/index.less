@@ -1,0 +1,394 @@
+@max_width: 900px;
+@background: #55CEBA;
+@color: #FFFFFF;
+
+*, *:before, *:after {
+	// -webkit-user-select:none;
+	-webkit-tap-highlight-color:rgba(0, 0, 0, 0);
+	-moz-tap-highlight-color:rgba(0, 0, 0, 0);
+	// -moz-user-select:-moz-none;
+	-webkit-touch-callout: none;
+	margin:0;
+	padding:0;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+	-ms-touch-action:pan-y;
+	outline: none;
+	text-decoration: none;
+}
+
+html,body {
+	margin: 0;
+	padding: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+body {
+	background: url(../images/bodybg.jpg) repeat;
+}
+
+.chessboard {
+	position: relative;
+	margin: auto;
+	background: url(../images/_cbbg.jpg) repeat;
+	margin: auto;
+	max-width: @max_width;
+
+	img {
+		display: block;
+		width: 6.66%;
+		float: left;
+
+		&:hover {
+			background: url(../images/_now.gif) 0 0 no-repeat;
+			background-size:100% auto;
+		}
+
+		&.check {
+			background: url(../images/_red.gif) 0 0 no-repeat;
+			background-size:100% auto;
+		}
+	}
+}
+
+input,textarea,button,.button {
+	display: block;
+	background: #FFFFFF !important;
+	border: #000000 dashed 1px;
+	height: 32px;
+	padding: 10px;
+	font-size: 12px;
+	line-height: 12px;
+	color: #000000 !important;
+	overflow: hidden;
+}
+input,textarea{
+	padding: 8px;
+	line-height: 16px;
+}
+textarea {
+	overflow-y: auto;
+	resize: none;
+}
+button {
+	line-height: 10px;
+}
+
+.card {
+	display: block;
+	background: #FFFFFF;
+	background: rgba(255, 255, 255, 0.5);
+	color: #222222;
+	border: #000000 dashed 1px;
+	padding: 5px 0;
+	margin: 5px 0;
+
+	.head {
+		position: relative;
+		height: 37px;
+		margin-top: -5px;
+		padding: 5px 10px;
+		padding-top: 10px;
+		line-height: 22px;
+
+		input,button,.button {
+			height: 24px;
+			padding: 4px;
+			font-size: 14px;
+			line-height: 14px;
+			background: #55CEBA !important;
+			background: rgba(85, 206, 186, 0.3) !important;
+			border: 0;
+			border-radius: 4px;
+			float: left;
+			margin-left: 4px;
+		}
+
+		.left {
+			position: absolute;
+			left: 10px;
+			top: 10px;
+		}
+
+		.center {
+			margin: auto;
+			text-align: center;
+		}
+
+		.right {
+			position: absolute;
+			right: 10px;
+			top: 10px;
+		}
+	}
+
+	.body {
+		padding: 5px 10px;
+	}
+}
+
+#header {
+	position: relative;
+	margin: auto;
+	max-width: @max_width;
+	background: @background;
+	background: rgba(85, 206, 186, 0.3);
+	color: #000000;
+	height: 40px;
+	line-height: 40px;
+	overflow:hidden;
+
+	a {
+		color: #000000;
+	}
+
+	.left {
+		position: absolute;
+		left: 10px;
+		top: 0px;
+		height: 40px;
+
+		.button {
+			float: left;
+			margin-right: 5px;
+			margin-top: 9px;
+			padding: 5px;
+			height: 22px;
+		}
+	}
+
+	.right {
+		position: absolute;
+		right: 10px;
+		top: 0px;
+		height: 40px;
+
+		.button {
+			float: left;
+			margin-left: 5px;
+			margin-top: 9px;
+			padding: 5px;
+			height: 22px;
+		}
+	}
+
+	.title {
+		margin: auto;
+		width: 200px;
+		height: 40px;
+		text-align: center;
+		font-weight: bold;
+		overflow:hidden;
+		color: #F74E1E;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+
+	#chess_color {
+		display: inline-block;
+		position: relative;
+		top: 4px;
+		margin-right: 4px;
+		width: 20px;
+		height: 20px;
+		border: gray solid 4px;
+		border-radius: 10px;
+		// border-color: green;
+	}
+}
+
+.form_inline {
+	* {
+		margin: 0 4px;
+		float: left;
+	}
+}
+
+#mainer {
+	position: relative;
+	margin: auto;
+	max-width: @max_width;
+
+	.bar {
+		position: relative;
+		height: 32px;
+		line-height: 32px;
+		margin: 4px 0;
+
+		.left {
+			position: absolute;
+			left: 10px;
+			top: 0;
+		}
+
+		.right {
+			position: absolute;
+			right: 10px;
+			top: 0;
+		}
+
+		.center {
+			position: relative;
+			margin: auto;
+			width: 200px;
+		}
+	}
+}
+
+#chat_area {
+	// display: none;
+	position: relative;
+	height: 240px;
+	padding-bottom: 42px;
+	background: #55CEBA;
+	background: rgba(85, 206, 186, 0.3);
+
+	#chat_panel {
+		position: relative;
+		height: 100%;
+		padding: 10px;
+		// background: #55CEBA;
+		// background: rgba(85, 206, 186, 0.3);
+	}
+
+	#chat_panel_content {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		background: #FFFFFF;
+		background: rgba(255, 255, 255, 0.7);
+		padding: 10px;
+		padding-top: 32px;
+		border-radius: 4px;
+		// border: #000000 dashed 1px;
+
+		#chat_panel_content_head {
+			position: absolute;
+			left: 0;
+			top: 10px;
+			width: 100%;
+			height: 22px;
+			padding: 0 10px;
+			font-size: 12px;
+			line-height: 12px;
+			border-bottom: #C5E8CD solid 1px;
+		}
+
+		#chat_panel_content_body {
+			width: 100%;
+			height: 100%;
+			overflow-x: hidden;
+			overflow-y: auto;
+			font-size: 14px;
+			line-height: 20px;
+
+			.name {
+				color: #007B43;
+
+				b {
+					color: #E7609E;
+				}
+			}
+
+			.text {
+				color: #2B2B2B;
+			}
+
+			.time {
+				color: #884898;
+			}
+		}
+	}
+
+	#chat_send {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: 42px;
+		padding: 0 66px;
+		padding-bottom: 10px;
+		padding-right: 66px;
+	}
+
+	#chat_bomb_button,textarea#chat_text,button#chat_send_button {
+		// border: 0;
+		border-radius: 4px;
+	}
+
+	#chat_bomb_button {
+		position: absolute;
+		left: 10px;
+		top: 0px;
+		width: 52px;
+		height: 32px;
+		line-height: 32px;
+		text-align: center;
+		font-size: 12px;
+		background: #DDDDDD;
+		background: rgba(221, 221, 221, 0.7);
+		border: #000000 dashed 1px;
+		cursor: pointer;
+		color: #666666;
+
+		&.selected {
+			color: #000000;
+			background: #55CEBA;
+			background: rgba(85, 206, 186, 0.7);
+		}
+	}
+
+	textarea#chat_text {
+		margin-right: 52px;
+		width: 100%;
+		background: #FFFFFF !important;
+		background: rgba(255, 255, 255, 0.7) !important;
+		overflow: hidden !important;
+	}
+
+	button#chat_send_button {
+		position: absolute;
+		right: 10px;
+		top: 0;
+		width: 52px;
+		background: #55CEBA !important;
+		background: rgba(85, 206, 186, 0.7) !important;
+	}
+}
+
+#log {
+	position: absolute;
+	width: 300px;
+	height: 100%;
+	border: #000 solid 1px;
+	right: 0;
+	top: 0;
+	overflow: auto;
+}
+
+@media screen and (max-width: @max_width) {
+	.card {
+		margin: 5px 10px;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	#header {
+		a {
+			display: block;
+			float: left;
+			margin-left: 4px;
+			width: 48px;
+			text-align: center;
+			overflow:hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
+		.title {
+			width: 100px;
+		}
+	}
+}
