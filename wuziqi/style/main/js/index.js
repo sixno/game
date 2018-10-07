@@ -178,10 +178,12 @@ function load_cell_selected(x,y)
 }
 
 var chess_close = false;
-var chess_color = 'black';
+var chess_color = '';
 
 function play_chess(x,y)
 {
+	if(chess_color == '') chess_color = 'black';
+
 	if(chess_close)
 	{
 		if(chess_close == 'black')
@@ -232,6 +234,25 @@ function play_chess(x,y)
 
 function ai_play(color)
 {
+	if(chess_color == '')
+	{
+		chess_color = color == 'black' ? 'white' : 'black';
+	}
+
+	if(chess_close)
+	{
+		if(chess_close == 'black')
+		{
+			alert('黑棋赢了！');
+		}
+		else
+		{
+			alert('白棋赢了！');
+		}
+
+		return false;
+	}
+
 	var xy = board_guide(color);
 
 	xy = xy.split(',');
@@ -264,6 +285,8 @@ var white_three = []; // 白活三两端
 var black_three = []; // 黑活三两端
 var white_final = []; // 白成五一步
 var black_final = []; // 黑成五一步
+var white_alive = []; // 白优先活子
+var black_alive = []; // 黑优先活子
 
 // 两重九宫格打分法，反映的是活路棋子的能量密度，即周边十六点空间分布特征
 
@@ -275,7 +298,12 @@ function board_grade(color,ix,iy)
 		{
 			for(var gx = 0;gx < 15;gx++)
 			{
-				if(gx > 1 && gx < 13 && gy > 1 && gy < 13)
+				if(gx == 7 && gy == 7)
+				{
+					white_board[gx+','+gy] = 13;
+					black_board[gx+','+gy] = 13;
+				}
+				else if(gx > 1 && gx < 13 && gy > 1 && gy < 13)
 				{
 					white_board[gx+','+gy] = 8;
 					black_board[gx+','+gy] = 8;
@@ -1345,6 +1373,7 @@ function board_grade(color,ix,iy)
 		}
 
 		// 存储活三冲四以及中成信息，必杀技
+		// 以及优先活子情况
 
 		var count = 1;
 		var end_0 = '';
@@ -1415,6 +1444,21 @@ function board_grade(color,ix,iy)
 			else
 			{
 				break;
+			}
+		}
+
+		if(count == 2)
+		{
+			if(end_0 != '' && end_1 != '')
+			{
+				if(color == 'white')
+				{
+					white_alive.push([end_0,end_1]);
+				}
+				else
+				{
+					black_alive.push([end_0,end_1]);
+				}
 			}
 		}
 
@@ -1528,6 +1572,21 @@ function board_grade(color,ix,iy)
 			}
 		}
 
+		if(count == 2)
+		{
+			if(end_0 != '' && end_1 != '')
+			{
+				if(color == 'white')
+				{
+					white_alive.push([end_0,end_1]);
+				}
+				else
+				{
+					black_alive.push([end_0,end_1]);
+				}
+			}
+		}
+
 		if(count == 3)
 		{
 			if(end_0 != '' && end_1 != '')
@@ -1631,6 +1690,21 @@ function board_grade(color,ix,iy)
 			else
 			{
 				break;
+			}
+		}
+
+		if(count == 2)
+		{
+			if(end_0 != '' && end_1 != '')
+			{
+				if(color == 'white')
+				{
+					white_alive.push([end_0,end_1]);
+				}
+				else
+				{
+					black_alive.push([end_0,end_1]);
+				}
 			}
 		}
 
@@ -1744,6 +1818,21 @@ function board_grade(color,ix,iy)
 			}
 		}
 
+		if(count == 2)
+		{
+			if(end_0 != '' && end_1 != '')
+			{
+				if(color == 'white')
+				{
+					white_alive.push([end_0,end_1]);
+				}
+				else
+				{
+					black_alive.push([end_0,end_1]);
+				}
+			}
+		}
+
 		if(count == 3)
 		{
 			if(end_0 != '' && end_1 != '')
@@ -1823,6 +1912,11 @@ function board_guide(color)
 	var black_high_score = 0;
 	var black_high_place = Array();
 
+	// console.log('white_final',white_final);
+	// console.log('white_three',white_three);
+	// console.log('black_final',black_final);
+	// console.log('black_three',black_three);
+
 	if(color == 'white')
 	{
 		if(white_final.length > 0)
@@ -1842,6 +1936,79 @@ function board_guide(color)
 				if(typeof(chess_board[black_final[k]]) != 'undefined') continue;
 
 				return black_final[k];
+			}
+		}
+
+		if(white_three.length > 0)
+		{
+			for(var k in white_three)
+			{
+				if(typeof(chess_board[white_three[k][0]]) != 'undefined' || typeof(chess_board[white_three[k][1]]) != 'undefined') continue;
+
+				if(white_board[white_three[k][0]] > white_board[white_three[k][1]])
+				{
+					return white_three[k][0];
+				}
+				else
+				{
+					return white_three[k][1];
+				}
+			}
+		}
+
+		if(black_three.length > 0)
+		{
+			for(var k in black_three)
+			{
+				if(typeof(chess_board[black_three[k][0]]) != 'undefined' || typeof(chess_board[black_three[k][1]]) != 'undefined') continue;
+
+				if(black_board[black_three[k][0]] > black_board[black_three[k][1]])
+				{
+					return black_three[k][0];
+				}
+				else
+				{
+					return black_three[k][1];
+				}
+			}
+		}
+
+		if(white_alive.length > 0)
+		{
+			for(var k in white_alive)
+			{
+				if(typeof(chess_board[white_alive[k][0]]) != 'undefined' || typeof(chess_board[white_alive[k][1]]) != 'undefined') continue;
+
+				if(white_board[white_alive[k][0]] > white_board[white_alive[k][1]])
+				{
+					return white_alive[k][0];
+				}
+				else
+				{
+					return white_alive[k][1];
+				}
+			}
+		}
+	}
+	else
+	{
+		if(black_final.length > 0)
+		{
+			for(var k in black_final)
+			{
+				if(typeof(chess_board[black_final[k]]) != 'undefined') continue;
+
+				return black_final[k];
+			}
+		}
+
+		if(white_final != '')
+		{
+			for(var k in white_final)
+			{
+				if(typeof(chess_board[white_final[k]]) != 'undefined') continue;
+
+				return white_final[k];
 			}
 		}
 
@@ -1878,59 +2045,20 @@ function board_guide(color)
 				}
 			}
 		}
-	}
-	else
-	{
-		if(black_final.length > 0)
+
+		if(black_alive.length > 0)
 		{
-			for(var k in black_final)
+			for(var k in black_alive)
 			{
-				if(typeof(chess_board[black_final[k]]) != 'undefined') continue;
+				if(typeof(chess_board[black_alive[k][0]]) != 'undefined' || typeof(chess_board[black_alive[k][1]]) != 'undefined') continue;
 
-				return black_final[k];
-			}
-		}
-
-		if(black_final != '')
-		{
-			for(var k in black_final)
-			{
-				if(typeof(chess_board[black_final[k]]) != 'undefined') continue;
-
-				return black_final[k];
-			}
-		}
-
-		if(black_three.length > 0)
-		{
-			for(var k in black_three)
-			{
-				if(typeof(chess_board[black_three[k][0]]) != 'undefined' || typeof(chess_board[black_three[k][1]]) != 'undefined') continue;
-
-				if(black_board[black_three[k][0]] > black_board[black_three[k][1]])
+				if(black_board[black_alive[k][0]] > black_board[black_alive[k][1]])
 				{
-					return black_three[k][0];
+					return black_alive[k][0];
 				}
 				else
 				{
-					return black_three[k][1];
-				}
-			}
-		}
-
-		if(black_three.length > 0)
-		{
-			for(var k in black_three)
-			{
-				if(typeof(chess_board[black_three[k][0]]) != 'undefined' || typeof(chess_board[black_three[k][1]]) != 'undefined') continue;
-
-				if(black_board[black_three[k][0]] > black_board[black_three[k][1]])
-				{
-					return black_three[k][0];
-				}
-				else
-				{
-					return black_three[k][1];
+					return black_alive[k][1];
 				}
 			}
 		}
