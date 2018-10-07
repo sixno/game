@@ -1,21 +1,11 @@
-var play_time = 1;
-var vict_time = 0;
-var fail_time = 0;
-
-var _url = 'style/main/images/';
 var _svg = null;
 var _sto = null;
-var imgs = ['cc.gif','lt.gif','lb.gif','rt.gif','rb.gif','cc.png','ll.gif','rr.gif','tt.gif','bb.gif','_now.gif','_red.gif','_chess_black.png','_chess_white.png'];
+
+var cell_select   = null;
+var cell_selected = null;
 
 jQuery(function($){
 	load_board();
-
-	$(document).on('click','.node',function(){
-		var off_x = Number($(this).attr('x'));
-		var off_y = Number($(this).attr('y'));
-
-		play_chess(off_x,off_y);
-	});
 });
 
 function in_array(search,array)
@@ -31,30 +21,53 @@ function in_array(search,array)
 	return false;
 }
 
-var board_img = 0;
 function load_board()
 {
-	if(typeof(imgs[board_img]) != 'undefined')
+	_svg = document.getElementById('board').getSVGDocument();
+
+	if(_svg == null)
 	{
-		var img = new Image();
-
-		img.onload = function(){
-			load_board();
-		}
-
-		img.src = _url+imgs[board_img];
-
-		board_img++;
+		_sto = setTimeout('load_board()',100);
 	}
 	else
 	{
+		clearTimeout(_sto);
+
+		if(!_svg.rootElement)
+		{
+			alert('Sorry, your browser is so terrible, please use chrome and do not use it again.（推荐使用谷歌浏览器）');
+
+			return false;
+		}
+
 		init_board();
 	}
 }
 
 function init_board()
 {
-	var ht = '';
+	var cell = null;
+	var _img = '';
+
+	cell_select = _svg.createElementNS('http://www.w3.org/2000/svg','image');
+
+	cell_select.href.baseVal = '_now.gif';
+	cell_select.setAttribute('style','width:60px;height:60px;');
+
+	cell_select.addEventListener('mouseleave',function(){
+		_svg.rootElement.removeChild(cell_select);
+
+		cell_select_onboard = false;
+	});
+
+	cell_select.addEventListener('click',function(){
+		play_chess($(this).attr('x'),$(this).attr('y'));
+	});
+
+	cell_selected = _svg.createElementNS('http://www.w3.org/2000/svg','image');
+
+	cell_selected.href.baseVal = '_red.gif';
+	cell_selected.setAttribute('style','width:60px;height:60px;');
 
 	for(var iy = 0;iy < 15;iy++)
 	{
@@ -83,31 +96,85 @@ function init_board()
 					break;
 			}
 
-			ht += '<img class="node" id="node_'+ix+'_'+iy+'" x="'+ix+'" y="'+iy+'" src="'+_url+_img+'" onclick="javascript:;">';
+			cell = _svg.createElementNS('http://www.w3.org/2000/svg','image');
+
+			cell.href.baseVal = _img;
+			cell.setAttribute('x',ix*60);
+			cell.setAttribute('y',iy*60);
+			cell.setAttribute('style','width:60px;height:60px;');
+
+			cell.addEventListener('mouseenter',function(){
+				load_cell_select($(this).attr('x'),$(this).attr('y'));
+			});
+
+			_svg.rootElement.appendChild(cell);
 		}
 	}
+};
 
-	ht += '<br style="margin:0;padding:0;height:0;clear:both;">';
+function load_chess(color,ix,iy,is)
+{
+	if(typeof(is) == 'undefined') is = true;
 
-	$('#chessboard').html(ht);
-	$('#footboard').show();
+	var chess = _svg.createElementNS('http://www.w3.org/2000/svg','image');
+
+	chess.href.baseVal = '_chess_'+color+'.png';
+
+	if(is)
+	{
+		var x = ix * 60;
+		var y = iy * 60;
+	}
+	else
+	{
+		var x = ix;
+		var y = iy;
+	}
+
+	chess.setAttribute('x',x);
+	chess.setAttribute('y',y);
+	chess.setAttribute('style','width:60px;height:60px;');
+
+	_svg.rootElement.appendChild(chess);
+
+	load_cell_selected(x,y);
 }
 
-function load_chess(color,off_x,off_y,chessb)
+var cell_select_onboard = false;
+
+function load_cell_select(x,y)
 {
-	if(typeof(color) == 'undefined' || typeof(off_x) == 'undefined' || typeof(off_y) == 'undefined') return false;
-	if(typeof(chess_board[off_x+','+off_y]) != 'undefined') return false;
+	cell_select.setAttribute('x',x);
+	cell_select.setAttribute('y',y);
 
-	chessb = chessb || $('#chessboard');
+	if(!cell_select_onboard)
+	{
+		cell_select_onboard = true;
 
-	var off_l = (off_x / 15) * 100;
-	var off_t = (off_y / 15) * 100;
+		_svg.rootElement.appendChild(cell_select);
+	}
+}
 
-	chessb.append('<img class="chess" src="'+_url+'_chess_'+color+'.png" style="position:absolute;left:'+off_l+'%;top:'+off_t+'%;">');
+var cell_selected_onboard = false;
 
-	chessb.find('.check').removeClass('check');
+function load_cell_selected(x,y)
+{
+	cell_selected.setAttribute('x',x);
+	cell_selected.setAttribute('y',y);
 
-	$('#node_'+off_x+'_'+off_y).addClass('check');
+	if(cell_select_onboard)
+	{
+		_svg.rootElement.removeChild(cell_select);
+
+		cell_select_onboard = false;
+	}
+
+	if(!cell_selected_onboard)
+	{
+		cell_selected_onboard = true;
+
+		_svg.rootElement.appendChild(cell_selected);
+	}
 }
 
 var chess_close = false;
@@ -131,33 +198,22 @@ function play_chess(x,y)
 		return false;
 	}
 
-	load_chess(chess_color,x,y);
+	load_chess(chess_color,x,y,false);
 
-	board_grade(chess_color,x,y);
+	board_grade(chess_color,x/60,y/60);
 
-	if(is_win(chess_color,x,y))
+	if(is_win(chess_color,x/60,y/60))
 	{
-		if(chess_color == chess_close)
-		{
-			vict_time++;
-
-			$('#vict_time').html(vict_time);
-		}
-		else
-		{
-			fail_time++;
-
-			$('#fail_time').html(fail_time);
-		}
-
-		if(chess_close == 'black')
-		{
-			alert('黑棋赢了！');
-		}
-		else
-		{
-			alert('白棋赢了！');
-		}
+		setTimeout(function(){
+			if(chess_color == 'black')
+			{
+				alert('黑棋赢了！');
+			}
+			else
+			{
+				alert('白棋赢了！');
+			}
+		},100);
 	}
 	else
 	{
@@ -207,55 +263,30 @@ function ai_play(color)
 
 	if(is_win(color,Number(xy[0]),Number(xy[1])))
 	{
-		if(chess_color == chess_close)
-		{
-			vict_time++;
-
-			$('#vict_time').html(vict_time);
-		}
-		else
-		{
-			fail_time++;
-
-			$('#fail_time').html(fail_time);
-		}
-
-		if(color == 'black')
-		{
-			alert('黑棋赢了！');
-		}
-		else
-		{
-			alert('白棋赢了！');
-		}
+		setTimeout(function(){
+			if(color == 'black')
+			{
+				alert('黑棋赢了！');
+			}
+			else
+			{
+				alert('白棋赢了！');
+			}
+		},100);
 	}
 
 	return true;
 }
 
-function ai_first()
-{
-	if(chess_color == '')
-	{
-		ai_play('black');
-
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
 var chess_board = {};
 var white_board = {};
 var black_board = {};
-var white_alive = []; // 白优先活子
-var black_alive = []; // 黑优先活子
 var white_three = []; // 白活三两端
 var black_three = []; // 黑活三两端
 var white_final = []; // 白成五一步
 var black_final = []; // 黑成五一步
+var white_alive = []; // 白优先活子
+var black_alive = []; // 黑优先活子
 
 // 两重九宫格打分法，反映的是活路棋子的能量密度，即周边十六点空间分布特征
 
@@ -2212,30 +2243,4 @@ function is_win(color,x,y)
 	}
 
 	return chess_close;
-}
-
-function replay()
-{
-	if(chess_close)
-	{
-		play_time++;
-
-		$('#play_time').html(play_time);
-	}
-
-	chess_board = {};
-	white_board = {};
-	black_board = {};
-	white_three = []; // 白活三两端
-	black_three = []; // 黑活三两端
-	white_final = []; // 白成五一步
-	black_final = []; // 黑成五一步
-	white_alive = []; // 白优先活子
-	black_alive = []; // 黑优先活子
-
-	chess_close = false;
-	chess_color = '';
-
-	init_board();
-	board_grade();
 }

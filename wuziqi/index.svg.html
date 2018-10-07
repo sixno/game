@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="keywords" content="休闲 娱乐 游戏 在线小游戏 五子棋 在线五子棋">
+<meta name="description" content="老少皆宜的休闲小游戏">
+<meta name="author" content="庆新">
+<meta name="copyright" content="朱庆新">
+<title>在线五子棋</title>
+<link rel="stylesheet" type="text/css" href="style/main/css/index.css">
+<style type="text/css">
+#board-container {position:absolute;left: 0;top: 50px;bottom: 0;width:100%;}
+#board {display: block;position: relative;background: url(style/main/images/_cbbg.jpg);margin: auto;max-width: 100%;max-height: 100%;}
+</style>
+<script type="text/javascript" src="../_common/jquery/jquery-2.2.4.min.js"></script>
+<!-- <script type="text/javascript" src="../_common/tcpcall/tcpcall.js"></script> -->
+<script type="text/javascript" src="style/main/js/index.svg.js"></script>
+</head>
+<body>
+
+<div id="header" style="margin-bottom: 10px;">
+	<div class="left">
+		<!-- <a href="" class="button">返回在线版</a> -->
+		<a href="javascript:;" class="button">单机模式</a>
+	</div>
+	<div class="right">
+		<a href="javascript:ai_play('black');" class="button">AI执黑</a>
+		<a href="javascript:window.location.reload();" class="button">重玩</a>
+	</div>
+	<div class="title">在线五子棋</div>
+</div>
+
+<div id="board-container">
+	<embed id="board" src="style/main/images/canvas.svg" type="image/svg+xml">
+</div>
+
+</body>
+</html>
