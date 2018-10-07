@@ -415,6 +415,16 @@ function board_grade(color,ix,iy)
 						{
 							black_1212 = black_1212 == 4 ? 5 : 1;
 						}
+
+						if(white_1212 == 5)
+						{
+							if(gy-3 >= 0 && typeof(chess_board[gx+','+(gy-3)]) == 'undefined') white_1212 = 6;
+						}
+
+						if(black_1212 == 5)
+						{
+							if(gy-3 >= 0 && typeof(chess_board[gx+','+(gy-3)]) == 'undefined') black_1212 = 6;
+						}
 					}
 				}
 
@@ -470,6 +480,16 @@ function board_grade(color,ix,iy)
 						else
 						{
 							black_1203 = black_1203 == 4 ? 5 : 1;
+						}
+
+						if(white_1203 == 5)
+						{
+							if(gx+3 < 15 && gy-3 >= 0 && typeof(chess_board[(gx+3)+','+(gy-3)]) == 'undefined') white_1203 = 6;
+						}
+
+						if(black_1203 == 5)
+						{
+							if(gx+3 < 15 && gy-3 >= 0 && typeof(chess_board[(gx+3)+','+(gy-3)]) == 'undefined') black_1203 = 6;
 						}
 					}
 				}
@@ -527,6 +547,16 @@ function board_grade(color,ix,iy)
 						{
 							black_0303 = black_0303 == 4 ? 5 : 1;
 						}
+
+						if(white_0303 == 5)
+						{
+							if(gx+3 < 15 && typeof(chess_board[(gx+3)+','+gy]) == 'undefined') white_0303 = 6;
+						}
+
+						if(black_0303 == 5)
+						{
+							if(gx+3 < 15 && typeof(chess_board[(gx+3)+','+gy]) == 'undefined') black_0303 = 6;
+						}
 					}
 				}
 
@@ -557,7 +587,7 @@ function board_grade(color,ix,iy)
 							}
 							else
 							{
-								white_0306 = 3;
+								black_0306 = 3;
 							}
 						}
 					}
@@ -582,6 +612,16 @@ function board_grade(color,ix,iy)
 						else
 						{
 							black_0306 = black_0306 == 4 ? 5 : 1;
+						}
+
+						if(white_0306 == 5)
+						{
+							if(gx+3 < 15 && gy+3 < 15 && typeof(chess_board[(gx+3)+','+(gy+3)]) == 'undefined') white_0306 = 6;
+						}
+
+						if(black_0306 == 5)
+						{
+							if(gx+3 < 15 && gy+3 < 15 && typeof(chess_board[(gx+3)+','+(gy+3)]) == 'undefined') black_0306 = 6;
 						}
 					}
 				}
@@ -639,6 +679,16 @@ function board_grade(color,ix,iy)
 						{
 							black_0606 = black_0606 == 4 ? 5 : 1;
 						}
+
+						if(white_0606 == 5)
+						{
+							if(gy+3 < 15 && typeof(chess_board[gx+','+(gy+3)]) == 'undefined') white_0606 = 6;
+						}
+
+						if(black_0606 == 5)
+						{
+							if(gy+3 < 15 && typeof(chess_board[gx+','+(gy+3)]) == 'undefined') black_0606 = 6;
+						}
 					}
 				}
 
@@ -694,6 +744,16 @@ function board_grade(color,ix,iy)
 						else
 						{
 							black_0609 = black_0609 == 4 ? 5 : 1;
+						}
+
+						if(white_0609 == 5)
+						{
+							if(gx-3 >= 0 && gy+3 < 15 && typeof(chess_board[(gx-3)+','+(gy+3)]) == 'undefined') white_0609 = 6;
+						}
+
+						if(black_0609 == 5)
+						{
+							if(gx-3 >= 0 && gy+3 < 15 && typeof(chess_board[(gx-3)+','+(gy+3)]) == 'undefined') black_0609 = 6;
 						}
 					}
 				}
@@ -751,6 +811,16 @@ function board_grade(color,ix,iy)
 						{
 							black_0909 = black_0909 == 4 ? 5 : 1;
 						}
+
+						if(white_0909 == 5)
+						{
+							if(gx-3 >= 0 && typeof(chess_board[(gx-3)+','+gy]) == 'undefined') white_0909 = 6;
+						}
+
+						if(black_0909 == 5)
+						{
+							if(gx-3 >= 0 && typeof(chess_board[(gx-3)+','+gy]) == 'undefined') black_0909 = 6;
+						}
 					}
 				}
 
@@ -807,13 +877,129 @@ function board_grade(color,ix,iy)
 						{
 							black_0912 = black_0912 == 4 ? 5 : 1;
 						}
+
+						if(white_0912 == 5)
+						{
+							if(gx-3 >= 0 && gy-3 >= 0 && typeof(chess_board[(gx-3)+','+(gy-3)]) == 'undefined') white_0912 = 6;
+						}
+
+						if(black_0912 == 5)
+						{
+							if(gx-3 >= 0 && gy-3 >= 0 && typeof(chess_board[(gx-3)+','+(gy-3)]) == 'undefined') black_0912 = 6;
+						}
 					}
 				}
 
 				// summary
 
-				white_board[gx+','+gy] = (white_1212 * white_0606) + (white_1203 * white_0609) + (white_0303 * white_0909) + (white_0306 * white_0912);
-				black_board[gx+','+gy] = (black_1212 * black_0606) + (black_1203 * black_0609) + (black_0303 * black_0909) + (black_0306 * black_0912);
+				// normal
+
+				// white_1212 *= white_0606;
+				// white_1203 *= white_0609;
+				// white_0303 *= white_0909;
+				// white_0306 *= white_0912;
+
+				// black_1212 *= black_0606;
+				// black_1203 *= black_0609;
+				// black_0303 *= black_0909;
+				// black_0306 *= black_0912;
+
+				// hard mode ^-^
+
+				// ?@+#++& 1x6=6    x2
+				// ?@&#++& 1x6=6    x2
+				// ?&&#++& 2x6=12   x4
+				// ?&+#+&? 4x4=16   x4
+				// ?&+#++x 4x5=20 ? x2
+				// ?&+#++& 4x6=24   x8
+				// x++#++x 5x5=25 * final
+				// x++#++& 5x6=30 * final
+				// &++#++& 6x6=36 * final
+
+				switch((white_1212+white_0606)+','+(white_1212*white_0606))
+				{
+					case '7,6': case '9,20':  white_1212 *= white_0606*2; break;
+					case '8,12': case '8,16': white_1212 *= white_0606*4; break;
+					case '10,24':             white_1212 *= white_0606*8; break;
+
+					case '10,25': case '11,30': case '12,36': white_final.push(gx+','+gy); break;
+
+					default: white_1212 *= white_0606; break;
+				}
+				switch((white_1203+white_0609)+','+(white_1203+white_0609))
+				{
+					case '7,6': case '9,20':  white_1203 *= white_0609*2; break;
+					case '8,12': case '8,16': white_1203 *= white_0609*4; break;
+					case '10,24':             white_1203 *= white_0609*8; break;
+
+					case '10,25': case '11,30': case '12,36': white_final.push(gx+','+gy); break;
+
+					default: white_1203 *= white_0609; break;
+				}
+				switch((white_0303+white_0909)+','+(white_0303+white_0909))
+				{
+					case '7,6': case '9,20':  white_0303 *= white_0909*2; break;
+					case '8,12': case '8,16': white_0303 *= white_0909*4; break;
+					case '10,24':             white_0303 *= white_0909*8; break;
+
+					case '10,25': case '11,30': case '12,36': white_final.push(gx+','+gy); break;
+
+					default: white_0303 *= white_0909; break;
+				}
+				switch((white_0306+white_0912)+','+(white_0306+white_0912))
+				{
+					case '7,6': case '9,20':  white_0306 *= white_0912*2; break;
+					case '8,12': case '8,16': white_0306 *= white_0912*4; break;
+					case '10,24':             white_0306 *= white_0912*8; break;
+
+					case '10,25': case '11,30': case '12,36': white_final.push(gx+','+gy); break;
+
+					default: white_0306 *= white_0912; break;
+				}
+
+				switch((black_1212+black_0606)+','+(black_1212*black_0606))
+				{
+					case '7,6': case '9,20':  black_1212 *= black_0606*2; break;
+					case '8,12': case '8,16': black_1212 *= black_0606*4; break;
+					case '10,24':             black_1212 *= black_0606*8; break;
+
+					case '10,25': case '11,30': case '12,36': black_final.push(gx+','+gy); break;
+
+					default: black_1212 *= black_0606; break;
+				}
+				switch((black_1203+black_0609)+','+(black_1203+black_0609))
+				{
+					case '7,6': case '9,20':  black_1203 *= black_0609*2; break;
+					case '8,12': case '8,16': black_1203 *= black_0609*4; break;
+					case '10,24':             black_1203 *= black_0609*8; break;
+
+					case '10,25': case '11,30': case '12,36': black_final.push(gx+','+gy); break;
+
+					default: black_1203 *= black_0609; break;
+				}
+				switch((black_0303+black_0909)+','+(black_0303+black_0909))
+				{
+					case '7,6': case '9,20':  black_0303 *= black_0909*2; break;
+					case '8,12': case '8,16': black_0303 *= black_0909*4; break;
+					case '10,24':             black_0303 *= black_0909*8; break;
+
+					case '10,25': case '11,30': case '12,36': black_final.push(gx+','+gy); break;
+
+					default: black_0303 *= black_0909; break;
+				}
+				switch((black_0306+black_0912)+','+(black_0306+black_0912))
+				{
+					case '7,6': case '9,20':  black_0306 *= black_0912*2; break;
+					case '8,12': case '8,16': black_0306 *= black_0912*4; break;
+					case '10,24':             black_0306 *= black_0912*8; break;
+
+					case '10,25': case '11,30': case '12,36': black_final.push(gx+','+gy); break;
+
+					default: black_0306 *= black_0912; break;
+				}
+
+				white_board[gx+','+gy] = white_1212 + white_1203 + white_0303 + white_0306;
+				black_board[gx+','+gy] = black_1212 + black_1203 + black_0303 + black_0306;
 			}
 		}
 
@@ -1440,6 +1626,9 @@ function board_guide(color)
 			black_high_place.push(xy);
 		}
 	}
+
+	// console.log('white:'+white_high_score);console.log(white_high_place);
+	// console.log('black:'+black_high_score);console.log(black_high_place);
 
 	if(color == 'white')
 	{
