@@ -8,6 +8,19 @@ jQuery(function($){
 	load_board();
 });
 
+function in_array(search,array)
+{
+	for(var i in array)
+	{
+		if(array[i] == search)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 function load_board()
 {
 	_svg = document.getElementById('board').getSVGDocument();
@@ -324,6 +337,8 @@ function board_grade(color,ix,iy)
 		var black_0909 = 0;
 		var black_0912 = 0;
 
+		var fuck_jssss = '';
+
 		if(ix - 1 >= 0) dx_min = -1;
 		if(ix - 2 >= 0) dx_min = -2;
 		if(ix + 1 < 15) dx_max = 1;
@@ -418,12 +433,32 @@ function board_grade(color,ix,iy)
 
 						if(white_1212 == 5)
 						{
-							if(gy-3 >= 0 && typeof(chess_board[gx+','+(gy-3)]) == 'undefined') white_1212 = 6;
+							if(gy-3 >= 0)
+							{
+								if(typeof(chess_board[gx+','+(gy-3)]) == 'undefined')
+								{
+									white_1212 = 6;
+								}
+								else if(chess_board[gx+','+(gy-3)] == 'white')
+								{
+									white_1212 = 7;
+								}
+							}
 						}
 
 						if(black_1212 == 5)
 						{
-							if(gy-3 >= 0 && typeof(chess_board[gx+','+(gy-3)]) == 'undefined') black_1212 = 6;
+							if(gy-3 >= 0)
+							{
+								if(typeof(chess_board[gx+','+(gy-3)]) == 'undefined')
+								{
+									black_1212 = 6;
+								}
+								else if(chess_board[gx+','+(gy-3)] == 'black')
+								{
+									black_1212 = 7;
+								}
+							}
 						}
 					}
 				}
@@ -484,12 +519,32 @@ function board_grade(color,ix,iy)
 
 						if(white_1203 == 5)
 						{
-							if(gx+3 < 15 && gy-3 >= 0 && typeof(chess_board[(gx+3)+','+(gy-3)]) == 'undefined') white_1203 = 6;
+							if(gx+3 < 15 && gy-3 >= 0)
+							{
+								if(typeof(chess_board[(gx+3)+','+(gy-3)]) == 'undefined')
+								{
+									white_1203 = 6;
+								}
+								else if(chess_board[(gx+3)+','+(gy-3)] == 'white')
+								{
+									white_1203 = 7;
+								}
+							}
 						}
 
 						if(black_1203 == 5)
 						{
-							if(gx+3 < 15 && gy-3 >= 0 && typeof(chess_board[(gx+3)+','+(gy-3)]) == 'undefined') black_1203 = 6;
+							if(gx+3 < 15 && gy-3 >= 0)
+							{
+								if(typeof(chess_board[(gx+3)+','+(gy-3)]) == 'undefined')
+								{
+									black_1203 = 6;
+								}
+								else if(chess_board[(gx+3)+','+(gy-3)] == 'black')
+								{
+									black_1203 = 7;
+								}
+							}
 						}
 					}
 				}
@@ -550,12 +605,32 @@ function board_grade(color,ix,iy)
 
 						if(white_0303 == 5)
 						{
-							if(gx+3 < 15 && typeof(chess_board[(gx+3)+','+gy]) == 'undefined') white_0303 = 6;
+							if(gx+3 < 15)
+							{
+								if(typeof(chess_board[(gx+3)+','+gy]) == 'undefined')
+								{
+									white_0303 = 6;
+								}
+								else if(chess_board[(gx+3)+','+gy] == 'white')
+								{
+									white_0303 = 7;
+								}
+							}
 						}
 
 						if(black_0303 == 5)
 						{
-							if(gx+3 < 15 && typeof(chess_board[(gx+3)+','+gy]) == 'undefined') black_0303 = 6;
+							if(gx+3 < 15)
+							{
+								if(typeof(chess_board[(gx+3)+','+gy]) == 'undefined')
+								{
+									black_0303 = 6;
+								}
+								else if(chess_board[(gx+3)+','+gy] == 'black')
+								{
+									black_0303 = 7;
+								}
+							}
 						}
 					}
 				}
@@ -616,12 +691,32 @@ function board_grade(color,ix,iy)
 
 						if(white_0306 == 5)
 						{
-							if(gx+3 < 15 && gy+3 < 15 && typeof(chess_board[(gx+3)+','+(gy+3)]) == 'undefined') white_0306 = 6;
+							if(gx+3 < 15 && gy+3 < 15)
+							{
+								if(typeof(chess_board[(gx+3)+','+(gy+3)]) == 'undefined')
+								{
+									white_0306 = 6;
+								}
+								else if(chess_board[(gx+3)+','+(gy+3)] == 'white')
+								{
+									white_0306 = 7;
+								}
+							}
 						}
 
 						if(black_0306 == 5)
 						{
-							if(gx+3 < 15 && gy+3 < 15 && typeof(chess_board[(gx+3)+','+(gy+3)]) == 'undefined') black_0306 = 6;
+							if(gx+3 < 15 && gy+3 < 15)
+							{
+								if(typeof(chess_board[(gx+3)+','+(gy+3)]) == 'undefined')
+								{
+									black_0306 = 6;
+								}
+								else if(chess_board[(gx+3)+','+(gy+3)] == 'black')
+								{
+									black_0306 = 7;
+								}
+							}
 						}
 					}
 				}
@@ -682,12 +777,32 @@ function board_grade(color,ix,iy)
 
 						if(white_0606 == 5)
 						{
-							if(gy+3 < 15 && typeof(chess_board[gx+','+(gy+3)]) == 'undefined') white_0606 = 6;
+							if(gy+3 < 15)
+							{
+								if(typeof(chess_board[gx+','+(gy+3)]) == 'undefined')
+								{
+									white_0606 = 6;
+								}
+								else if(chess_board[gx+','+(gy+3)] == 'white')
+								{
+									white_0606 = 7;
+								}
+							}
 						}
 
 						if(black_0606 == 5)
 						{
-							if(gy+3 < 15 && typeof(chess_board[gx+','+(gy+3)]) == 'undefined') black_0606 = 6;
+							if(gy+3 < 15)
+							{
+								if(typeof(chess_board[gx+','+(gy+3)]) == 'undefined')
+								{
+									black_0606 = 6;
+								}
+								else if(chess_board[gx+','+(gy+3)] == 'black')
+								{
+									black_0606 = 7;
+								}
+							}
 						}
 					}
 				}
@@ -748,12 +863,32 @@ function board_grade(color,ix,iy)
 
 						if(white_0609 == 5)
 						{
-							if(gx-3 >= 0 && gy+3 < 15 && typeof(chess_board[(gx-3)+','+(gy+3)]) == 'undefined') white_0609 = 6;
+							if(gx-3 >= 0 && gy+3 < 15)
+							{
+								if(typeof(chess_board[(gx-3)+','+(gy+3)]) == 'undefined')
+								{
+									white_0609 = 6;
+								}
+								else if(chess_board[(gx-3)+','+(gy+3)] == 'white')
+								{
+									white_0609 = 7;
+								}
+							}
 						}
 
 						if(black_0609 == 5)
 						{
-							if(gx-3 >= 0 && gy+3 < 15 && typeof(chess_board[(gx-3)+','+(gy+3)]) == 'undefined') black_0609 = 6;
+							if(gx-3 >= 0 && gy+3 < 15)
+							{
+								if(typeof(chess_board[(gx-3)+','+(gy+3)]) == 'undefined')
+								{
+									black_0609 = 6;
+								}
+								else if(chess_board[(gx-3)+','+(gy+3)] == 'black')
+								{
+									black_0609 = 7;
+								}
+							}
 						}
 					}
 				}
@@ -814,12 +949,32 @@ function board_grade(color,ix,iy)
 
 						if(white_0909 == 5)
 						{
-							if(gx-3 >= 0 && typeof(chess_board[(gx-3)+','+gy]) == 'undefined') white_0909 = 6;
+							if(gx-3 >= 0)
+							{
+								if(typeof(chess_board[(gx-3)+','+gy]) == 'undefined')
+								{
+									white_0909 = 6;
+								}
+								else if(chess_board[(gx-3)+','+gy] == 'white')
+								{
+									white_0909 = 7;
+								}
+							}
 						}
 
 						if(black_0909 == 5)
 						{
-							if(gx-3 >= 0 && typeof(chess_board[(gx-3)+','+gy]) == 'undefined') black_0909 = 6;
+							if(gx-3 >= 0)
+							{
+								if(typeof(chess_board[(gx-3)+','+gy]) == 'undefined')
+								{
+									black_0909 = 6;
+								}
+								else if(chess_board[(gx-3)+','+gy] == 'black')
+								{
+									black_0909 = 7;
+								}
+							}
 						}
 					}
 				}
@@ -880,17 +1035,55 @@ function board_grade(color,ix,iy)
 
 						if(white_0912 == 5)
 						{
-							if(gx-3 >= 0 && gy-3 >= 0 && typeof(chess_board[(gx-3)+','+(gy-3)]) == 'undefined') white_0912 = 6;
+							if(gx-3 >= 0 && gy-3 >= 0)
+							{
+								if(typeof(chess_board[(gx-3)+','+(gy-3)]) == 'undefined')
+								{
+									white_0912 = 6;
+								}
+								else if(chess_board[(gx-3)+','+(gy-3)] == 'white')
+								{
+									white_0912 = 7;
+								}
+							}
 						}
 
 						if(black_0912 == 5)
 						{
-							if(gx-3 >= 0 && gy-3 >= 0 && typeof(chess_board[(gx-3)+','+(gy-3)]) == 'undefined') black_0912 = 6;
+							if(gx-3 >= 0 && gy-3 >= 0)
+							{
+								if(typeof(chess_board[(gx-3)+','+(gy-3)]) == 'undefined')
+								{
+									black_0912 = 6;
+								}
+								else if(chess_board[(gx-3)+','+(gy-3)] == 'black')
+								{
+									black_0912 = 7;
+								}
+							}
 						}
 					}
 				}
 
 				// summary
+
+				// console.log(gx+','+gy+':summary:white_1212:'+white_1212);
+				// console.log(gx+','+gy+':summary:white_1203:'+white_1203);
+				// console.log(gx+','+gy+':summary:white_0303:'+white_0303);
+				// console.log(gx+','+gy+':summary:white_0306:'+white_0306);
+				// console.log(gx+','+gy+':summary:white_0606:'+white_0606);
+				// console.log(gx+','+gy+':summary:white_0609:'+white_0609);
+				// console.log(gx+','+gy+':summary:white_0909:'+white_0909);
+				// console.log(gx+','+gy+':summary:white_0912:'+white_0912);
+
+				// console.log(gx+','+gy+':summary:black_1212:'+black_1212);
+				// console.log(gx+','+gy+':summary:black_1203:'+black_1203);
+				// console.log(gx+','+gy+':summary:black_0303:'+black_0303);
+				// console.log(gx+','+gy+':summary:black_0306:'+black_0306);
+				// console.log(gx+','+gy+':summary:black_0606:'+black_0606);
+				// console.log(gx+','+gy+':summary:black_0609:'+black_0609);
+				// console.log(gx+','+gy+':summary:black_0909:'+black_0909);
+				// console.log(gx+','+gy+':summary:black_0912:'+black_0912);
 
 				// normal
 
@@ -911,92 +1104,240 @@ function board_grade(color,ix,iy)
 				// ?&&#++& 2x6=12   x4
 				// ?&+#+&? 4x4=16   x4
 				// ?&+#++x 4x5=20 ? x2
-				// ?&+#++& 4x6=24   x8
+				// ?&+#++& 4x6=24 * final
 				// x++#++x 5x5=25 * final
 				// x++#++& 5x6=30 * final
 				// &++#++& 6x6=36 * final
+				// &++#+++ 6x7=42 * final
+				// ?@+#+++ 1x7=7  * final
+				// ?&+#+++ 4x7=28 * final
+				// +++#+++ 7x7=49 * final
 
-				switch((white_1212+white_0606)+','+(white_1212*white_0606))
+				// console.log('switch:white:'+gx+','+gy+':1212-0606:'+(white_1212+white_0606)+','+(white_1212*white_0606));
+				// console.log('switch:white:'+gx+','+gy+':1212-0606:'+(white_1203+white_0609)+','+(white_1203*white_0609));
+				// console.log('switch:white:'+gx+','+gy+':1212-0606:'+(white_0303+white_0909)+','+(white_0303*white_0909));
+				// console.log('switch:white:'+gx+','+gy+':1212-0606:'+(white_0306+white_0912)+','+(white_0306*white_0912));
+
+				// console.log('switch:black:'+gx+','+gy+':1212-0606:'+(black_1212+black_0606)+','+(black_1212*black_0606));
+				// console.log('switch:black:'+gx+','+gy+':1212-0606:'+(black_1203+black_0609)+','+(black_1203*black_0609));
+				// console.log('switch:black:'+gx+','+gy+':1212-0606:'+(black_0303+black_0909)+','+(black_0303*black_0909));
+				// console.log('switch:black:'+gx+','+gy+':1212-0606:'+(black_0306+black_0912)+','+(black_0306*black_0912));
+
+				// 不知道为什么switch处理非常有问题，fuck
+
+				// switch((white_1212+white_0606)+','+(white_1212*white_0606))
+				// {
+				// 	case '7,6': case '9,20':  white_1212 *= white_0606*2; break;
+				// 	case '8,12': case '8,16': white_1212 *= white_0606*4; break;
+				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': white_1212 *= white_0606*8; white_final.push(gx+','+gy); break;
+				// 	default: white_1212 *= white_0606; break;
+				// }
+				// switch((white_1203+white_0609)+','+(white_1203+white_0609))
+				// {
+				// 	case '7,6': case '9,20':  white_1203 *= white_0609*2; break;
+				// 	case '8,12': case '8,16': white_1203 *= white_0609*4; break;
+				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': white_1203 *= white_0609*8; white_final.push(gx+','+gy); break;
+				// 	default: white_1203 *= white_0609; break;
+				// }
+				// switch((white_0303+white_0909)+','+(white_0303+white_0909))
+				// {
+				// 	case '7,6': case '9,20':  white_0303 *= white_0909*2; break;
+				// 	case '8,12': case '8,16': white_0303 *= white_0909*4; break;
+				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': white_0303 *= white_0909*8; white_final.push(gx+','+gy); break;
+				// 	default: white_0303 *= white_0909; break;
+				// }
+				// switch((white_0306+white_0912)+','+(white_0306+white_0912))
+				// {
+				// 	case '7,6': case '9,20':  white_0306 *= white_0912*2; break;
+				// 	case '8,12': case '8,16': white_0306 *= white_0912*4; break;
+				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': white_0306 *= white_0912*8; white_final.push(gx+','+gy); break;
+				// 	default: white_0306 *= white_0912; break;
+				// }
+
+				// switch((black_1212+black_0606)+','+(black_1212*black_0606))
+				// {
+				// 	case '7,6': case '9,20':  black_1212 *= black_0606*2; break;
+				// 	case '8,12': case '8,16': black_1212 *= black_0606*4; break;
+				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': black_1212 *= black_0606*8; black_final.push(gx+','+gy); break;
+				// 	default: black_1212 *= black_0606; break;
+				// }
+				// switch((black_1203+black_0609)+','+(black_1203+black_0609))
+				// {
+				// 	case '7,6': case '9,20':  black_1203 *= black_0609*2; break;
+				// 	case '8,12': case '8,16': black_1203 *= black_0609*4; break;
+				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': black_1203 *= black_0609*8; black_final.push(gx+','+gy); break;
+				// 	default: black_1203 *= black_0609; break;
+				// }
+				// switch((black_0303+black_0909)+','+(black_0303+black_0909))
+				// {
+				// 	case '7,6': case '9,20':  black_0303 *= black_0909*2; break;
+				// 	case '8,12': case '8,16': black_0303 *= black_0909*4; break;
+				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': black_0303 *= black_0909*8; black_final.push(gx+','+gy); break;
+				// 	default: black_0303 *= black_0909; break;
+				// }
+				// switch((black_0306+black_0912)+','+(black_0306+black_0912))
+				// {
+				// 	case '7,6': case '9,20':  black_0306 *= black_0912*2; break;
+				// 	case '8,12': case '8,16': black_0306 *= black_0912*4; break;
+				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': black_0306 *= black_0912*8; black_final.push(gx+','+gy); break;
+				// 	default: black_0306 *= black_0912; break;
+				// }
+
+				fuck_jssss = (white_1212+white_0606)+','+(white_1212*white_0606);
+				if(in_array(fuck_jssss,['7,6','9,20']))
 				{
-					case '7,6': case '9,20':  white_1212 *= white_0606*2; break;
-					case '8,12': case '8,16': white_1212 *= white_0606*4; break;
-					case '10,24':             white_1212 *= white_0606*8; break;
-
-					case '10,25': case '11,30': case '12,36': white_final.push(gx+','+gy); break;
-
-					default: white_1212 *= white_0606; break;
+					white_1212 *= white_0606*2;
 				}
-				switch((white_1203+white_0609)+','+(white_1203+white_0609))
+				else if(in_array(fuck_jssss,['8,12','8,16']))
 				{
-					case '7,6': case '9,20':  white_1203 *= white_0609*2; break;
-					case '8,12': case '8,16': white_1203 *= white_0609*4; break;
-					case '10,24':             white_1203 *= white_0609*8; break;
-
-					case '10,25': case '11,30': case '12,36': white_final.push(gx+','+gy); break;
-
-					default: white_1203 *= white_0609; break;
+					white_1212 *= white_0606*4;
 				}
-				switch((white_0303+white_0909)+','+(white_0303+white_0909))
+				else if(in_array(fuck_jssss,['10,24','10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
 				{
-					case '7,6': case '9,20':  white_0303 *= white_0909*2; break;
-					case '8,12': case '8,16': white_0303 *= white_0909*4; break;
-					case '10,24':             white_0303 *= white_0909*8; break;
-
-					case '10,25': case '11,30': case '12,36': white_final.push(gx+','+gy); break;
-
-					default: white_0303 *= white_0909; break;
+					white_1212 *= white_0606*8;
+					white_final.push(gx+','+gy);
 				}
-				switch((white_0306+white_0912)+','+(white_0306+white_0912))
+				else
 				{
-					case '7,6': case '9,20':  white_0306 *= white_0912*2; break;
-					case '8,12': case '8,16': white_0306 *= white_0912*4; break;
-					case '10,24':             white_0306 *= white_0912*8; break;
-
-					case '10,25': case '11,30': case '12,36': white_final.push(gx+','+gy); break;
-
-					default: white_0306 *= white_0912; break;
+					white_1212 *= white_0606;
 				}
-
-				switch((black_1212+black_0606)+','+(black_1212*black_0606))
+				fuck_jssss = (white_1203+white_0609)+','+(white_1203*white_0609);
+				if(in_array(fuck_jssss,['7,6','9,20']))
 				{
-					case '7,6': case '9,20':  black_1212 *= black_0606*2; break;
-					case '8,12': case '8,16': black_1212 *= black_0606*4; break;
-					case '10,24':             black_1212 *= black_0606*8; break;
-
-					case '10,25': case '11,30': case '12,36': black_final.push(gx+','+gy); break;
-
-					default: black_1212 *= black_0606; break;
+					white_1203 *= white_0609*2;
 				}
-				switch((black_1203+black_0609)+','+(black_1203+black_0609))
+				else if(in_array(fuck_jssss,['8,12','8,16']))
 				{
-					case '7,6': case '9,20':  black_1203 *= black_0609*2; break;
-					case '8,12': case '8,16': black_1203 *= black_0609*4; break;
-					case '10,24':             black_1203 *= black_0609*8; break;
-
-					case '10,25': case '11,30': case '12,36': black_final.push(gx+','+gy); break;
-
-					default: black_1203 *= black_0609; break;
+					white_1203 *= white_0609*4;
 				}
-				switch((black_0303+black_0909)+','+(black_0303+black_0909))
+				else if(in_array(fuck_jssss,['10,24','10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
 				{
-					case '7,6': case '9,20':  black_0303 *= black_0909*2; break;
-					case '8,12': case '8,16': black_0303 *= black_0909*4; break;
-					case '10,24':             black_0303 *= black_0909*8; break;
-
-					case '10,25': case '11,30': case '12,36': black_final.push(gx+','+gy); break;
-
-					default: black_0303 *= black_0909; break;
+					white_1203 *= white_0609*8;
+					white_final.push(gx+','+gy);
 				}
-				switch((black_0306+black_0912)+','+(black_0306+black_0912))
+				else
 				{
-					case '7,6': case '9,20':  black_0306 *= black_0912*2; break;
-					case '8,12': case '8,16': black_0306 *= black_0912*4; break;
-					case '10,24':             black_0306 *= black_0912*8; break;
-
-					case '10,25': case '11,30': case '12,36': black_final.push(gx+','+gy); break;
-
-					default: black_0306 *= black_0912; break;
+					white_1203 *= white_0609;
 				}
+				fuck_jssss = (white_0303+white_0909)+','+(white_0303*white_0909);
+				if(in_array(fuck_jssss,['7,6','9,20']))
+				{
+					white_0303 *= white_0909*2;
+				}
+				else if(in_array(fuck_jssss,['8,12','8,16']))
+				{
+					white_0303 *= white_0909*4;
+				}
+				else if(in_array(fuck_jssss,['10,24','10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
+				{
+					white_0303 *= white_0909*8;
+					white_final.push(gx+','+gy);
+				}
+				else
+				{
+					white_0303 *= white_0909;
+				}
+				fuck_jssss = (white_0306+white_0912)+','+(white_0306*white_0912);
+				if(in_array(fuck_jssss,['7,6','9,20']))
+				{
+					white_0306 *= white_0912*2;
+				}
+				else if(in_array(fuck_jssss,['8,12','8,16']))
+				{
+					white_0306 *= white_0912*4;
+				}
+				else if(in_array(fuck_jssss,['10,24','10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
+				{
+					white_0306 *= white_0912*8;
+					white_final.push(gx+','+gy);
+				}
+				else
+				{
+					white_0306 *= white_0912;
+				}
+
+				fuck_jssss = (black_1212+black_0606)+','+(black_1212*black_0606);
+				if(in_array(fuck_jssss,['7,6','9,20']))
+				{
+					black_1212 *= black_0606*2;
+				}
+				else if(in_array(fuck_jssss,['8,12','8,16']))
+				{
+					black_1212 *= black_0606*4;
+				}
+				else if(in_array(fuck_jssss,['10,24','10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
+				{
+					black_1212 *= black_0606*8;
+					black_final.push(gx+','+gy);
+				}
+				else
+				{
+					black_1212 *= black_0606;
+				}
+				fuck_jssss = (black_1203+black_0609)+','+(black_1203*black_0609);
+				if(in_array(fuck_jssss,['7,6','9,20']))
+				{
+					black_1203 *= black_0609*2;
+				}
+				else if(in_array(fuck_jssss,['8,12','8,16']))
+				{
+					black_1203 *= black_0609*4;
+				}
+				else if(in_array(fuck_jssss,['10,24','10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
+				{
+					black_1203 *= black_0609*8;
+					black_final.push(gx+','+gy);
+				}
+				else
+				{
+					black_1203 *= black_0609;
+				}
+				fuck_jssss = (black_0303+black_0909)+','+(black_0303*black_0909);
+				if(in_array(fuck_jssss,['7,6','9,20']))
+				{
+					black_0303 *= black_0909*2;
+				}
+				else if(in_array(fuck_jssss,['8,12','8,16']))
+				{
+					black_0303 *= black_0909*4;
+				}
+				else if(in_array(fuck_jssss,['10,24','10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
+				{
+					black_0303 *= black_0909*8;
+					black_final.push(gx+','+gy);
+				}
+				else
+				{
+					black_0303 *= black_0909;
+				}
+				fuck_jssss = (black_0306+black_0912)+','+(black_0306*black_0912);
+				if(in_array(fuck_jssss,['7,6','9,20']))
+				{
+					black_0306 *= black_0912*2;
+				}
+				else if(in_array(fuck_jssss,['8,12','8,16']))
+				{
+					black_0306 *= black_0912*4;
+				}
+				else if(in_array(fuck_jssss,['10,24','10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
+				{
+					black_0306 *= black_0912*8;
+					black_final.push(gx+','+gy);
+				}
+				else
+				{
+					black_0306 *= black_0912;
+				}
+
+				// console.log(gx+','+gy+':white_1212:'+white_1212);
+				// console.log(gx+','+gy+':white_1203:'+white_1203);
+				// console.log(gx+','+gy+':white_0303:'+white_0303);
+				// console.log(gx+','+gy+':white_0306:'+white_0306);
+
+				// console.log(gx+','+gy+':black_1212:'+black_1212);
+				// console.log(gx+','+gy+':black_1203:'+black_1203);
+				// console.log(gx+','+gy+':black_0303:'+black_0303);
+				// console.log(gx+','+gy+':black_0306:'+black_0306);
 
 				white_board[gx+','+gy] = white_1212 + white_1203 + white_0303 + white_0306;
 				black_board[gx+','+gy] = black_1212 + black_1203 + black_0303 + black_0306;
@@ -1474,8 +1815,6 @@ function board_grade(color,ix,iy)
 }
 
 board_grade();
-
-// 还有几种中间一子成五的情况无法100%发现
 
 function board_guide(color)
 {
