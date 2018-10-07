@@ -1,0 +1,202 @@
+/*style of modal with overlay*/
+@modal_head_height: 40px;
+@modal_foot_height: 40px;
+@modal_head_background: #55CEBA;
+@modal_foot_background: #55CEBA;
+@modal_info_iconscolor: #55CEBA;
+
+@font-face {
+	font-family: 'icoinfo';
+	src:url('../fonts/icoinfo.eot?9vf33k');
+	src:url('../fonts/icoinfo.eot?9vf33k#iefix') format('embedded-opentype'),
+		url('../fonts/icoinfo.ttf?9vf33k') format('truetype'),
+		url('../fonts/icoinfo.woff?9vf33k') format('woff'),
+		url('../fonts/icoinfo.svg?9vf33k#icoinfo') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.overlay-for-modal{
+	position: fixed;
+	left: 0;
+	top: 0;
+	display: none;
+	width: 100%;
+	height: 100%;
+	background: #000000;
+	z-index: 10000;
+}
+.modal{
+	position: fixed;
+	padding: 0;
+	// border-radius: 5px;
+	box-shadow: 2px 2px 5px #000000;
+	z-index: 10100;
+	overflow: hidden;
+}
+.modal-head{
+	position: relative;
+	width: 100%;
+	height: @modal_head_height;
+	background: @modal_head_background;
+}
+.modal-head .modal-title{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: @modal_head_height;
+	line-height: @modal_head_height;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+.modal-head .modal-close-btn{
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: (@modal_head_height - 10);
+	height: (@modal_head_height - 10);
+	line-height: (@modal_head_height - 8);
+	text-align: center;
+	// border-radius: 10px;
+	font-size: (@modal_head_height - 10);
+	font-weight: bold;
+	color: #FFFFFF;
+	background: darken(@modal_head_background, 5%);
+	cursor: pointer;
+
+	&:hover{
+		background: darken(@modal_head_background, 10%);
+	}
+}
+.modal .modal-content-title{
+	display: none;
+}
+.modal-body{
+	position: relative;
+	padding: 0;
+	width: 100%;
+	background: #FFFFFF;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.modal-body .modal-content{
+	padding: 15px;
+	position: relative;
+}
+.modal-content .modal-bar{
+	display: none;
+}
+.modal-foot{
+	position: relative;
+	padding: 0;
+	width: 100%;
+	height: @modal_foot_height;
+	background: @modal_foot_background;
+}
+
+.modal-ok,.modal-cancel,.modal-close{
+	display: block;
+	float: right;
+	margin-right: 5px;
+	margin-top: 5px;
+	cursor: pointer;
+	background: #FFFFFF;
+	font-size: 14px;
+	padding: 0;
+	// border-radius: 2px;
+	color: #999999;
+	width: 50px;
+	height: (@modal_foot_height - 10);
+	line-height: (@modal_foot_height - 10);
+	text-align: center;
+}
+.modal-close{
+	float: none;
+	margin: 0 auto;
+	position: relative;
+	top: 5px;
+	width: 80px;
+}
+.modal-ok:hover,.modal-cancel:hover,.modal-close:hover{
+	color: #666666;
+}
+
+.modal-info-layout{
+	border: 0;
+	background: none;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.modal-info-layout td {
+	border: 0;
+	text-align: left;
+	vertical-align: middle;
+
+	&.modal-icon-alt {
+		width: 110px;
+
+		img,.modal-info-icon {
+			width: 100px;
+			height: 100px;
+		}
+
+		img {
+			display: block;
+		}
+	}
+}
+
+.modal-info-icon {
+	font-family: 'icoinfo' !important;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	display: block;
+	width: 100px;
+	height: 100px;
+	line-height: 110px;
+	text-align: center;
+	font-size: 100px;
+	
+	color: @modal_info_iconscolor;
+
+	&:before {
+		content: "\e908";
+	}
+
+	&.successful {
+		line-height: 86px;
+		font-size: 50px;
+		border: 10px solid @modal_info_iconscolor;
+		border-radius: 50px;
+
+		&:before {
+			content: "\e90c";
+		}
+	}
+
+	&.failed {
+		line-height: 86px;
+		font-size: 50px;
+		border: 10px solid @modal_info_iconscolor;
+		border-radius: 50px;
+
+		&:before {
+			content: "\e90b";
+		}
+	}
+
+	&.careful {
+		&:before {
+			content: "\e905";
+		}
+	}
+}

@@ -1,0 +1,44 @@
+.text_shine(@color) {
+	text-shadow: 1px 0 0 @color, 0 1px 0 @color, 
+    0 -1px 0 @color, -1px 0 0 @color, 
+    1px 0 1px @color, 0 1px 1px @color, 
+    0 -1px 1px @color, -1px 0 1px @color;
+}
+
+.bullet {
+	position: fixed;
+	left: 100%;
+	top: 0;
+	color: #FFFFFF;
+	padding: 3px;
+	// text-shadow: 0px 0px 2px #000000;
+	overflow: hidden;
+
+	&.color_1 {
+		.text_shine(#E60033);
+	}
+
+	&.color_2 {
+		.text_shine(#EE7800);
+	}
+
+	&.color_3 {
+		.text_shine(#FFD900);
+	}
+
+	&.color_4 {
+		.text_shine(#3EB370);
+	}
+
+	&.color_5 {
+		.text_shine(#0095D9);
+	}
+
+	&.color_6 {
+		.text_shine(#165E83);
+	}
+
+	&.color_7 {
+		.text_shine(#884898);
+	}
+}
