@@ -254,6 +254,8 @@ var white_alive = []; // 白优先活子
 var black_alive = []; // 黑优先活子
 var white_three = []; // 白活三两端
 var black_three = []; // 黑活三两端
+var white_ready = []; // 白活四一步
+var black_ready = []; // 黑活四一步
 var white_final = []; // 白成五一步
 var black_final = []; // 黑成五一步
 
@@ -365,9 +367,6 @@ function board_grade(color,ix,iy)
 		var black_0609 = 0;
 		var black_0909 = 0;
 		var black_0912 = 0;
-
-		var tmp_xy = Array();
-		var tmp_ps = Array();
 
 		if(ix - 1 >= 0) dx_min = -1;
 		if(ix - 2 >= 0) dx_min = -2;
@@ -1426,7 +1425,7 @@ function board_grade(color,ix,iy)
 				else if(boolean_grade(white_1212,white_0606,['5,6','-5,6']))
 				{
 					white_1212 = Math.abs(white_1212*white_0606)*16;
-					white_final.push(gx+','+gy);
+					white_ready.push(gx+','+gy);
 				}
 				else if(boolean_grade(white_1212,white_0606,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1467,7 +1466,7 @@ function board_grade(color,ix,iy)
 				else if(boolean_grade(white_1203,white_0609,['5,6','-5,6']))
 				{
 					white_1203 = Math.abs(white_1203*white_0609)*16;
-					white_final.push(gx+','+gy);
+					white_ready.push(gx+','+gy);
 				}
 				else if(boolean_grade(white_1203,white_0609,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1508,7 +1507,7 @@ function board_grade(color,ix,iy)
 				else if(boolean_grade(white_0303,white_0909,['5,6','-5,6']))
 				{
 					white_0303 = Math.abs(white_0303*white_0909)*16;
-					white_final.push(gx+','+gy);
+					white_ready.push(gx+','+gy);
 				}
 				else if(boolean_grade(white_0303,white_0909,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1549,7 +1548,7 @@ function board_grade(color,ix,iy)
 				else if(boolean_grade(white_0306,white_0912,['5,6','-5,6']))
 				{
 					white_0306 = Math.abs(white_0306*white_0912)*16;
-					white_final.push(gx+','+gy);
+					white_ready.push(gx+','+gy);
 				}
 				else if(boolean_grade(white_0306,white_0912,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1592,7 +1591,7 @@ function board_grade(color,ix,iy)
 				else if(boolean_grade(black_1212,black_0606,['5,6','-5,6']))
 				{
 					black_1212 = Math.abs(black_1212*black_0606)*16;
-					black_final.push(gx+','+gy);
+					black_ready.push(gx+','+gy);
 				}
 				else if(boolean_grade(black_1212,black_0606,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1633,7 +1632,7 @@ function board_grade(color,ix,iy)
 				else if(boolean_grade(black_1212,black_0606,['5,6','-5,6']))
 				{
 					black_1203 = Math.abs(black_1203*black_0609)*16;
-					black_final.push(gx+','+gy);
+					black_ready.push(gx+','+gy);
 				}
 				else if(boolean_grade(black_1203,black_0609,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1674,7 +1673,7 @@ function board_grade(color,ix,iy)
 				else if(boolean_grade(black_0303,black_0909,['5,6','-5,6']))
 				{
 					black_1203 = Math.abs(black_1203*black_0609)*16;
-					black_final.push(gx+','+gy);
+					black_ready.push(gx+','+gy);
 				}
 				else if(boolean_grade(black_0303,black_0909,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1715,7 +1714,7 @@ function board_grade(color,ix,iy)
 				else if(boolean_grade(black_0303,black_0909,['5,6','-5,6']))
 				{
 					black_0306 = Math.abs(black_0306*black_0912)*16;
-					black_final.push(gx+','+gy);
+					black_ready.push(gx+','+gy);
 				}
 				else if(boolean_grade(black_0306,black_0912,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -2318,6 +2317,26 @@ function board_guide(color)
 			}
 		}
 
+		if(white_ready.length > 0)
+		{
+			for(var k in white_ready)
+			{
+				if(typeof(chess_board[white_ready[k]]) != 'undefined') continue;
+
+				return white_ready[k];
+			}
+		}
+
+		if(black_ready.length > 0)
+		{
+			for(var k in black_ready)
+			{
+				if(typeof(chess_board[black_ready[k]]) != 'undefined') continue;
+
+				return black_ready[k];
+			}
+		}
+
 		if(white_three.length > 0)
 		{
 			for(var k in white_three)
@@ -2431,6 +2450,26 @@ function board_guide(color)
 				if(typeof(chess_board[white_final[k]]) != 'undefined') continue;
 
 				return white_final[k];
+			}
+		}
+
+		if(black_ready.length > 0)
+		{
+			for(var k in black_ready)
+			{
+				if(typeof(chess_board[black_ready[k]]) != 'undefined') continue;
+
+				return black_ready[k];
+			}
+		}
+
+		if(white_ready.length > 0)
+		{
+			for(var k in white_ready)
+			{
+				if(typeof(chess_board[white_ready[k]]) != 'undefined') continue;
+
+				return white_ready[k];
 			}
 		}
 
@@ -2794,12 +2833,14 @@ function replay()
 	chess_board = {};
 	white_board = {};
 	black_board = {};
-	white_three = []; // 白活三两端
-	black_three = []; // 黑活三两端
-	white_final = []; // 白成五一步
-	black_final = []; // 黑成五一步
-	white_alive = []; // 白优先活子
-	black_alive = []; // 黑优先活子
+	white_three = [];
+	black_three = [];
+	white_ready = [];
+	black_ready = [];
+	white_final = [];
+	black_final = [];
+	white_alive = [];
+	black_alive = [];
 
 	chess_close = false;
 	chess_color = '';
