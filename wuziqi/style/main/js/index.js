@@ -280,6 +280,7 @@ function boolean_grade(g1,g2,c1,c2)
 }
 
 // 两重九宫格打分法，反映的是活路棋子的能量密度，即周边十六点空间分布特征
+// 虽然打分只需要计算两重九宫，但实际上落子可以影响四重九宫
 
 function board_grade(color,ix,iy)
 {
@@ -364,6 +365,9 @@ function board_grade(color,ix,iy)
 		var black_0609 = 0;
 		var black_0909 = 0;
 		var black_0912 = 0;
+
+		var tmp_xy = Array();
+		var tmp_ps = Array();
 
 		if(ix - 1 >= 0) dx_min = -1;
 		if(ix - 2 >= 0) dx_min = -2;
@@ -1388,10 +1392,10 @@ function board_grade(color,ix,iy)
 				//  __#+_  3x5=15     x4
 				//  _+#+_  5x5=25     x8
 				//  __#++  3x6=18     x8
-				//  _+#++  5x6=30     x16
 				//  x_#+++ 1x7=7  x-7 x16
 				//  __#+++ 3x7=21 x-7 x16
 				//  +_#+++ 4x7=28 x-7 x16
+				//  _+#++  5x6=30 _ 6 x16 final
 				//  ++#++  6x6=36     x32 final
 				//  x_#+++ 1x7=7  + 7 x32 final
 				//  x+#+++ 2x7=14     x32 final
@@ -1415,9 +1419,14 @@ function board_grade(color,ix,iy)
 				{
 					white_1212 = Math.abs(white_1212*white_0606)*8;
 				}
-				else if(boolean_grade(white_1212,white_0606,['-7,1','-7,3','-7,4']))
+				else if(boolean_grade(white_1212,white_0606,['-7,1','-7,3','-7,4','-6,5','-6,-5']))
 				{
 					white_1212 = Math.abs(white_1212*white_0606)*16;
+				}
+				else if(boolean_grade(white_1212,white_0606,['5,6','-5,6']))
+				{
+					white_1212 = Math.abs(white_1212*white_0606)*16;
+					white_final.push(gx+','+gy);
 				}
 				else if(boolean_grade(white_1212,white_0606,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1451,9 +1460,14 @@ function board_grade(color,ix,iy)
 				{
 					white_1203 = Math.abs(white_1203*white_0609)*8;
 				}
-				else if(boolean_grade(white_1203,white_0609,['-7,1','-7,3','-7,4']))
+				else if(boolean_grade(white_1203,white_0609,['-7,1','-7,3','-7,4','-6,5','-6,-5']))
 				{
 					white_1203 = Math.abs(white_1203*white_0609)*16;
+				}
+				else if(boolean_grade(white_1203,white_0609,['5,6','-5,6']))
+				{
+					white_1203 = Math.abs(white_1203*white_0609)*16;
+					white_final.push(gx+','+gy);
 				}
 				else if(boolean_grade(white_1203,white_0609,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1487,9 +1501,14 @@ function board_grade(color,ix,iy)
 				{
 					white_0303 = Math.abs(white_0303*white_0909)*8;
 				}
-				else if(boolean_grade(white_0303,white_0909,['-7,1','-7,3','-7,4']))
+				else if(boolean_grade(white_0303,white_0909,['-7,1','-7,3','-7,4','-6,5','-6,-5']))
 				{
 					white_0303 = Math.abs(white_0303*white_0909)*16;
+				}
+				else if(boolean_grade(white_0303,white_0909,['5,6','-5,6']))
+				{
+					white_0303 = Math.abs(white_0303*white_0909)*16;
+					white_final.push(gx+','+gy);
 				}
 				else if(boolean_grade(white_0303,white_0909,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1523,9 +1542,14 @@ function board_grade(color,ix,iy)
 				{
 					white_0306 = Math.abs(white_0306*white_0912)*8;
 				}
-				else if(boolean_grade(white_0306,white_0912,['-7,1','-7,3','-7,4']))
+				else if(boolean_grade(white_0306,white_0912,['-7,1','-7,3','-7,4','-6,5','-6,-5']))
 				{
 					white_0306 = Math.abs(white_0306*white_0912)*16;
+				}
+				else if(boolean_grade(white_0306,white_0912,['5,6','-5,6']))
+				{
+					white_0306 = Math.abs(white_0306*white_0912)*16;
+					white_final.push(gx+','+gy);
 				}
 				else if(boolean_grade(white_0306,white_0912,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1561,9 +1585,14 @@ function board_grade(color,ix,iy)
 				{
 					black_1212 = Math.abs(black_1212*black_0606)*8;
 				}
-				else if(boolean_grade(black_1212,black_0606,['-7,1','-7,3','-7,4']))
+				else if(boolean_grade(black_1212,black_0606,['-7,1','-7,3','-7,4','-6,5','-6,-5']))
 				{
 					black_1212 = Math.abs(black_1212*black_0606)*16;
+				}
+				else if(boolean_grade(black_1212,black_0606,['5,6','-5,6']))
+				{
+					black_1212 = Math.abs(black_1212*black_0606)*16;
+					black_final.push(gx+','+gy);
 				}
 				else if(boolean_grade(black_1212,black_0606,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1597,9 +1626,14 @@ function board_grade(color,ix,iy)
 				{
 					black_1203 = Math.abs(black_1203*black_0609)*8;
 				}
-				else if(boolean_grade(black_1203,black_0609,['-7,1','-7,3','-7,4']))
+				else if(boolean_grade(black_1203,black_0609,['-7,1','-7,3','-7,4','-6,5','-6,-5']))
 				{
 					black_1203 = Math.abs(black_1203*black_0609)*16;
+				}
+				else if(boolean_grade(black_1212,black_0606,['5,6','-5,6']))
+				{
+					black_1203 = Math.abs(black_1203*black_0609)*16;
+					black_final.push(gx+','+gy);
 				}
 				else if(boolean_grade(black_1203,black_0609,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1633,9 +1667,14 @@ function board_grade(color,ix,iy)
 				{
 					black_0303 = Math.abs(black_0303*black_0909)*8;
 				}
-				else if(boolean_grade(black_0303,black_0909,['-7,1','-7,3','-7,4']))
+				else if(boolean_grade(black_0303,black_0909,['-7,1','-7,3','-7,4','-6,5','-6,-5']))
 				{
 					black_0303 = Math.abs(black_0303*black_0909)*16;
+				}
+				else if(boolean_grade(black_0303,black_0909,['5,6','-5,6']))
+				{
+					black_1203 = Math.abs(black_1203*black_0609)*16;
+					black_final.push(gx+','+gy);
 				}
 				else if(boolean_grade(black_0303,black_0909,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -1669,9 +1708,14 @@ function board_grade(color,ix,iy)
 				{
 					black_0306 = Math.abs(black_0306*black_0912)*8;
 				}
-				else if(boolean_grade(black_0306,black_0912,['-7,1','-7,3','-7,4']))
+				else if(boolean_grade(black_0306,black_0912,['-7,1','-7,3','-7,4','-6,5','-6,-5']))
 				{
 					black_0306 = Math.abs(black_0306*black_0912)*16;
+				}
+				else if(boolean_grade(black_0303,black_0909,['5,6','-5,6']))
+				{
+					black_0306 = Math.abs(black_0306*black_0912)*16;
+					black_final.push(gx+','+gy);
 				}
 				else if(boolean_grade(black_0306,black_0912,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
 				{
@@ -2515,8 +2559,8 @@ function board_guide(color)
 		}
 	}
 
-	console.log('white:'+white_high_score);console.log(white_high_place);
-	console.log('black:'+black_high_score);console.log(black_high_place);
+	// console.log('white:'+white_high_score);console.log(white_high_place);
+	// console.log('black:'+black_high_score);console.log(black_high_place);
 
 	if(color == 'white')
 	{
