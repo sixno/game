@@ -257,6 +257,28 @@ var black_three = []; // 黑活三两端
 var white_final = []; // 白成五一步
 var black_final = []; // 黑成五一步
 
+function boolean_grade(g1,g2,c1,c2)
+{
+	var tmp = 0;
+
+	if(g1 > g2)
+	{
+		tmp = g1;
+
+		g1 = g2;
+		g2 = tmp;
+	}
+
+	if(c2 === undefined)
+	{
+		return in_array(g1+','+g2,c1);
+	}
+	else
+	{
+		return in_array(g1,c1) && in_array(g2,c2);
+	}
+}
+
 // 两重九宫格打分法，反映的是活路棋子的能量密度，即周边十六点空间分布特征
 
 function board_grade(color,ix,iy)
@@ -267,40 +289,49 @@ function board_grade(color,ix,iy)
 		{
 			for(var gx = 0;gx < 15;gx++)
 			{
-				if(gx == 7 && gy == 7)
+				if(gx == 0 || gx == 14 || gy == 0 || gy == 14)
 				{
-					white_board[gx+','+gy] = 13;
-					black_board[gx+','+gy] = 13;
+					if(in_array(gx+','+gy,['0,0','0,14','14,14','14,0']))
+					{
+						white_board[gx+','+gy] = 0;
+						black_board[gx+','+gy] = 0;
+					}
+					else if(in_array(gx+','+gy,['0,1','1,0','13,0','14,1','14,13','13,14','1,14','0,13']))
+					{
+						white_board[gx+','+gy] = 3;
+						black_board[gx+','+gy] = 3;
+					}
+					else
+					{
+						white_board[gx+','+gy] = 9;
+						black_board[gx+','+gy] = 9;
+					}
 				}
-				else if(gx > 1 && gx < 13 && gy > 1 && gy < 13)
+				else if(gx == 1 || gx == 13 || gy == 1 || gy == 13)
 				{
-					white_board[gx+','+gy] = 8;
-					black_board[gx+','+gy] = 8;
-				}
-				else if(gx < 2 && gy > 1 && gy < 13)
-				{
-					white_board[gx+','+gy] = 5;
-					black_board[gx+','+gy] = 5;
-				}
-				else if(gx > 12 && gy > 1 && gy < 13)
-				{
-					white_board[gx+','+gy] = 5;
-					black_board[gx+','+gy] = 5;
-				}
-				else if(gy < 2 && gx > 1 && gx < 13)
-				{
-					white_board[gx+','+gy] = 5;
-					black_board[gx+','+gy] = 5;
-				}
-				else if(gy > 12 && gx > 1 && gx < 13)
-				{
-					white_board[gx+','+gy] = 5;
-					black_board[gx+','+gy] = 5;
+					if(in_array(gx+','+gy,['1,1','1,13','13,13','13,1']))
+					{
+						white_board[gx+','+gy] = 9;
+						black_board[gx+','+gy] = 9;
+					}
+					else
+					{
+						white_board[gx+','+gy] = 18;
+						black_board[gx+','+gy] = 18;
+					}
 				}
 				else
 				{
-					white_board[gx+','+gy] = 3;
-					black_board[gx+','+gy] = 3;
+					if(gx >= 5 && gx <= 9 && gy >= 5 && gy <= 9)
+					{
+						white_board[gx+','+gy] = 37;
+						black_board[gx+','+gy] = 37;
+					}
+					else
+					{
+						white_board[gx+','+gy] = 36;
+						black_board[gx+','+gy] = 36;
+					}
 				}
 			}
 		}
@@ -334,16 +365,22 @@ function board_grade(color,ix,iy)
 		var black_0909 = 0;
 		var black_0912 = 0;
 
-		var fuck_jssss = '';
-
 		if(ix - 1 >= 0) dx_min = -1;
 		if(ix - 2 >= 0) dx_min = -2;
-		if(ix + 1 < 15) dx_max = 1;
-		if(ix + 2 < 15) dx_max = 2;
+		if(ix - 3 >= 0) dx_min = -3;
+		if(ix - 4 >= 0) dx_min = -4;
+		if(ix + 1 < 15) dx_max =  1;
+		if(ix + 2 < 15) dx_max =  2;
+		if(ix + 3 < 15) dx_max =  3;
+		if(ix + 4 < 15) dx_max =  4;
 		if(iy - 1 >= 0) dy_min = -1;
 		if(iy - 2 >= 0) dy_min = -2;
-		if(iy + 1 < 15) dy_max = 1;
-		if(iy + 2 < 15) dy_max = 2;
+		if(iy - 3 >= 0) dy_min = -3;
+		if(iy - 4 >= 0) dy_min = -4;
+		if(iy + 1 < 15) dy_max =  1;
+		if(iy + 2 < 15) dy_max =  2;
+		if(iy + 3 < 15) dy_max =  3;
+		if(iy + 4 < 15) dy_max =  4;
 
 		for(var gy = iy + dy_min;gy <= iy + dy_max;gy++)
 		{
@@ -384,8 +421,8 @@ function board_grade(color,ix,iy)
 						{
 							if(gy-2 >= 0)
 							{
-								white_1212 = 2;
-								black_1212 = 2;
+								white_1212 = gy-3 < 0 || chess_board[gx+','+(gy-3)] == 'black' ? -3 : 3;
+								black_1212 = gy-3 < 0 || chess_board[gx+','+(gy-3)] == 'white' ? -3 : 3;
 							}
 							else
 							{
@@ -397,11 +434,13 @@ function board_grade(color,ix,iy)
 						{
 							if(chess_board[gx+','+(gy-2)] == 'white')
 							{
-								white_1212 = 3;
+								white_1212 = gy-3 < 0 || chess_board[gx+','+(gy-3)] == 'black' ? -4 : 4;
+								black_1212 = 1;
 							}
 							else
 							{
-								black_1212 = 3;
+								black_1212 = gy-3 < 0 || chess_board[gx+','+(gy-3)] == 'white' ? -4 : 4;
+								white_1212 = 1;
 							}
 						}
 					}
@@ -410,50 +449,80 @@ function board_grade(color,ix,iy)
 				{
 					if(chess_board[gx+','+(gy-1)] == 'white')
 					{
-						white_1212 = 4;
-					}
-					else
-					{
-						black_1212 = 4;
-					}
-
-					if(typeof(chess_board[gx+','+(gy-2)]) != 'undefined')
-					{
-						if(chess_board[gx+','+(gy-2)] == 'white')
+						if(gy-2 < 0 || chess_board[gx+','+(gy-2)] == 'black')
 						{
-							white_1212 = white_1212 == 4 ? 5 : 1;
+							white_1212 = 2;
 						}
 						else
 						{
-							black_1212 = black_1212 == 4 ? 5 : 1;
-						}
-
-						if(white_1212 == 5)
-						{
-							if(gy-3 >= 0)
+							if(typeof(chess_board[gx+','+(gy-2)]) == 'undefined')
 							{
-								if(typeof(chess_board[gx+','+(gy-3)]) == 'undefined')
+								if(gy-3 < 0 || chess_board[gx+','+(gy-3)] == 'black')
+								{
+									white_1212 = -5;
+								}
+								else
+								{
+									white_1212 = 5;
+								}
+							}
+							else
+							{
+								if(gy-3 < 0 || chess_board[gx+','+(gy-3)] == 'black')
+								{
+									white_1212 = -6;
+								}
+								else if(typeof(chess_board[gx+','+(gy-3)]) ==  'undefined')
 								{
 									white_1212 = 6;
 								}
-								else if(chess_board[gx+','+(gy-3)] == 'white')
+								else if(chess_board[gx+','+(gy-4)] == 'white')
 								{
 									white_1212 = 7;
 								}
+								else
+								{
+									white_1212 = -7;
+								}
 							}
 						}
-
-						if(black_1212 == 5)
+					}
+					else
+					{
+						if(gy-2 < 0 || chess_board[gx+','+(gy-2)] == 'white')
 						{
-							if(gy-3 >= 0)
+							black_1212 = 2;
+						}
+						else
+						{
+							if(typeof(chess_board[gx+','+(gy-2)]) == 'undefined')
 							{
-								if(typeof(chess_board[gx+','+(gy-3)]) == 'undefined')
+								if(gy-3 < 0 || chess_board[gx+','+(gy-3)] == 'white')
+								{
+									black_1212 = -5;
+								}
+								else
+								{
+									black_1212 = 5;
+								}
+							}
+							else
+							{
+								if(gy-3 < 0 || chess_board[gx+','+(gy-3)] == 'white')
+								{
+									black_1212 = -6;
+								}
+								else if(typeof(chess_board[gx+','+(gy-3)]) ==  'undefined')
 								{
 									black_1212 = 6;
 								}
-								else if(chess_board[gx+','+(gy-3)] == 'black')
+								else if(chess_board[gx+','+(gy-4)] == 'black')
 								{
 									black_1212 = 7;
+								}
+								else
+								{
+									black_1212 = -7;
 								}
 							}
 						}
@@ -470,8 +539,8 @@ function board_grade(color,ix,iy)
 						{
 							if(gx+2 < 15 && gy-2 >= 0)
 							{
-								white_1203 = 2;
-								black_1203 = 2;
+								white_1203 = gx+3 > 14 || gy-3 < 0 || chess_board[(gx+3)+','+(gy-3)] == 'black' ? -3 : 3;
+								black_1203 = gx+3 > 14 || gy-3 < 0 || chess_board[(gx+3)+','+(gy-3)] == 'white' ? -3 : 3;
 							}
 							else
 							{
@@ -483,11 +552,13 @@ function board_grade(color,ix,iy)
 						{
 							if(chess_board[(gx+2)+','+(gy-2)] == 'white')
 							{
-								white_1203 = 3;
+								white_1203 = gx+3 > 14 || gy-3 < 0 || chess_board[(gx+3)+','+(gy-3)] == 'black' ? -4 : 4;
+								black_1203 = 1;
 							}
 							else
 							{
-								black_1203 = 3;
+								black_1203 = gx+3 > 14 || gy-3 < 0 || chess_board[(gx+3)+','+(gy-3)] == 'white' ? -4 : 4;
+								white_1203 = 1;
 							}
 						}
 					}
@@ -496,50 +567,80 @@ function board_grade(color,ix,iy)
 				{
 					if(chess_board[(gx+1)+','+(gy-1)] == 'white')
 					{
-						white_1203 = 4;
-					}
-					else
-					{
-						black_1203 = 4;
-					}
-
-					if(typeof(chess_board[(gx+2)+','+(gy-2)]) != 'undefined')
-					{
-						if(chess_board[(gx+2)+','+(gy-2)] == 'white')
+						if(gx+2 > 14 || gy-2 < 0 || chess_board[(gx+2)+','+(gy-2)] == 'black')
 						{
-							white_1203 = white_1203 == 4 ? 5 : 1;
+							white_1203 = 2;
 						}
 						else
 						{
-							black_1203 = black_1203 == 4 ? 5 : 1;
-						}
-
-						if(white_1203 == 5)
-						{
-							if(gx+3 < 15 && gy-3 >= 0)
+							if(typeof(chess_board[(gx+2)+','+(gy-2)]) == 'undefined')
 							{
-								if(typeof(chess_board[(gx+3)+','+(gy-3)]) == 'undefined')
+								if(gx+3 > 14 || gy-3 < 0 || chess_board[(gx+3)+','+(gy-3)] == 'black')
+								{
+									white_1203 = -5;
+								}
+								else
+								{
+									white_1203 = 5;
+								}
+							}
+							else
+							{
+								if(gx+3 > 14 || gy-3 < 0 || chess_board[(gx+3)+','+(gy-3)] == 'black')
+								{
+									white_1203 = -6;
+								}
+								else if(typeof(chess_board[(gx+3)+','+(gy-3)]) ==  'undefined')
 								{
 									white_1203 = 6;
 								}
-								else if(chess_board[(gx+3)+','+(gy-3)] == 'white')
+								else if(chess_board[(gx+3)+','+(gy-4)] == 'white')
 								{
 									white_1203 = 7;
 								}
+								else
+								{
+									white_1203 = -7;
+								}
 							}
 						}
-
-						if(black_1203 == 5)
+					}
+					else
+					{
+						if(gx+2 > 14 || gy-2 < 0 || chess_board[(gx+2)+','+(gy-2)] == 'white')
 						{
-							if(gx+3 < 15 && gy-3 >= 0)
+							black_1203 = 2;
+						}
+						else
+						{
+							if(typeof(chess_board[(gx+2)+','+(gy-2)]) == 'undefined')
 							{
-								if(typeof(chess_board[(gx+3)+','+(gy-3)]) == 'undefined')
+								if(gx+3 > 14 || gy-3 < 0 || chess_board[(gx+3)+','+(gy-3)] == 'white')
+								{
+									black_1203 = -5;
+								}
+								else
+								{
+									black_1203 = 5;
+								}
+							}
+							else
+							{
+								if(gx+3 > 14 || gy-3 < 0 || chess_board[(gx+3)+','+(gy-3)] == 'white')
+								{
+									black_1203 = -6;
+								}
+								else if(typeof(chess_board[(gx+3)+','+(gy-3)]) ==  'undefined')
 								{
 									black_1203 = 6;
 								}
-								else if(chess_board[(gx+3)+','+(gy-3)] == 'black')
+								else if(chess_board[(gx+4)+','+(gy-4)] == 'black')
 								{
 									black_1203 = 7;
+								}
+								else
+								{
+									black_1203 = -7;
 								}
 							}
 						}
@@ -556,8 +657,8 @@ function board_grade(color,ix,iy)
 						{
 							if(gx+2 < 15)
 							{
-								white_0303 = 2;
-								black_0303 = 2;
+								white_0303 = gx+3 > 14 || chess_board[(gx+3)+','+gy] == 'black' ? -3 : 3;
+								black_0303 = gx+3 > 14 || chess_board[(gx+3)+','+gy] == 'white' ? -3 : 3;
 							}
 							else
 							{
@@ -569,11 +670,13 @@ function board_grade(color,ix,iy)
 						{
 							if(chess_board[(gx+2)+','+gy] == 'white')
 							{
-								white_0303 = 3;
+								white_0303 = gy+3 > 14 || chess_board[(gx+3)+','+gy] == 'black' ? -4 : 4;
+								black_0303 = 1;
 							}
 							else
 							{
-								black_0303 = 3;
+								black_0303 = gx+3 > 14 || chess_board[(gx+3)+','+gy] == 'white' ? -4 : 4;
+								white_0303 = 1;
 							}
 						}
 					}
@@ -582,50 +685,80 @@ function board_grade(color,ix,iy)
 				{
 					if(chess_board[(gx+1)+','+gy] == 'white')
 					{
-						white_0303 = 4;
-					}
-					else
-					{
-						black_0303 = 4;
-					}
-
-					if(typeof(chess_board[(gx+2)+','+gy]) != 'undefined')
-					{
-						if(chess_board[(gx+2)+','+gy] == 'white')
+						if(gx+2 > 14 || chess_board[(gx+2)+','+gy] == 'black')
 						{
-							white_0303 = white_0303 == 4 ? 5 : 1;
+							white_0303 = 2;
 						}
 						else
 						{
-							black_0303 = black_0303 == 4 ? 5 : 1;
-						}
-
-						if(white_0303 == 5)
-						{
-							if(gx+3 < 15)
+							if(typeof(chess_board[(gx+2)+','+gy]) == 'undefined')
 							{
-								if(typeof(chess_board[(gx+3)+','+gy]) == 'undefined')
+								if(gx+3 > 14 || chess_board[(gx+3)+','+gy] == 'black')
+								{
+									white_0303 = -5;
+								}
+								else
+								{
+									white_0303 = 5;
+								}
+							}
+							else
+							{
+								if(gx+3 > 14 || chess_board[(gx+3)+','+gy] == 'black')
+								{
+									white_0303 = -6;
+								}
+								else if(typeof(chess_board[(gx+3)+','+gy]) ==  'undefined')
 								{
 									white_0303 = 6;
 								}
-								else if(chess_board[(gx+3)+','+gy] == 'white')
+								else if(chess_board[(gx+4)+','+gy] == 'white')
 								{
 									white_0303 = 7;
 								}
+								else
+								{
+									white_0303 = -7;
+								}
 							}
 						}
-
-						if(black_0303 == 5)
+					}
+					else
+					{
+						if(gx+2 > 14 || chess_board[(gx+2)+','+gy] == 'white')
 						{
-							if(gx+3 < 15)
+							black_0303 = 2;
+						}
+						else
+						{
+							if(typeof(chess_board[(gx+2)+','+gy]) == 'undefined')
 							{
-								if(typeof(chess_board[(gx+3)+','+gy]) == 'undefined')
+								if(gx+3 > 14 || chess_board[(gx+3)+','+gy] == 'white')
+								{
+									black_0303 = -5;
+								}
+								else
+								{
+									black_0303 = 5;
+								}
+							}
+							else
+							{
+								if(gx+3 > 14 || chess_board[(gx+3)+','+gy] == 'white')
+								{
+									black_0303 = -6;
+								}
+								else if(typeof(chess_board[(gx+3)+','+gy]) ==  'undefined')
 								{
 									black_0303 = 6;
 								}
-								else if(chess_board[(gx+3)+','+gy] == 'black')
+								else if(chess_board[(gx+4)+','+gy] == 'black')
 								{
 									black_0303 = 7;
+								}
+								else
+								{
+									black_0303 = -7;
 								}
 							}
 						}
@@ -642,8 +775,8 @@ function board_grade(color,ix,iy)
 						{
 							if(gx+2 < 15 && gy+2 < 15)
 							{
-								white_0306 = 2;
-								black_0306 = 2;
+								white_0306 = gx+3 > 14 || gy+3 > 14 || chess_board[(gx+3)+','+(gy+3)] == 'black' ? -3 : 3;
+								black_0306 = gx+3 > 14 || gy+3 > 14 || chess_board[(gx+3)+','+(gy+3)] == 'white' ? -3 : 3;
 							}
 							else
 							{
@@ -655,11 +788,13 @@ function board_grade(color,ix,iy)
 						{
 							if(chess_board[(gx+2)+','+(gy+2)] == 'white')
 							{
-								white_0306 = 3;
+								white_0306 = gx+3 > 14 || gy+3 > 14 || chess_board[(gx+3)+','+(gy+3)] == 'black' ? -4 : 4;
+								black_0306 = 1;
 							}
 							else
 							{
-								black_0306 = 3;
+								black_0306 = gx+3 > 14 || gy+3 > 14 || chess_board[(gx+3)+','+(gy+3)] == 'white' ? -4 : 4;
+								white_0306 = 1;
 							}
 						}
 					}
@@ -668,50 +803,80 @@ function board_grade(color,ix,iy)
 				{
 					if(chess_board[(gx+1)+','+(gy+1)] == 'white')
 					{
-						white_0306 = 4;
-					}
-					else
-					{
-						black_0306 = 4;
-					}
-
-					if(typeof(chess_board[(gx+2)+','+(gy+2)]) != 'undefined')
-					{
-						if(chess_board[(gx+2)+','+(gy+2)] == 'white')
+						if(gx+2 > 14 || gy+2 > 14 || chess_board[(gx+2)+','+(gy+2)] == 'black')
 						{
-							white_0306 = white_0306 == 4 ? 5 : 1;
+							white_0306 = 2;
 						}
 						else
 						{
-							black_0306 = black_0306 == 4 ? 5 : 1;
-						}
-
-						if(white_0306 == 5)
-						{
-							if(gx+3 < 15 && gy+3 < 15)
+							if(typeof(chess_board[(gx+2)+','+(gy+2)]) == 'undefined')
 							{
-								if(typeof(chess_board[(gx+3)+','+(gy+3)]) == 'undefined')
+								if(gx+3 > 14 || gy+3 > 14 || chess_board[(gx+3)+','+(gy+3)] == 'black')
+								{
+									white_0306 = -5;
+								}
+								else
+								{
+									white_0306 = 5;
+								}
+							}
+							else
+							{
+								if(gx+3 > 14 || gy+3 > 14 || chess_board[(gx+3)+','+(gy+3)] == 'black')
+								{
+									white_0306 = -6;
+								}
+								else if(typeof(chess_board[(gx+3)+','+(gy+3)]) ==  'undefined')
 								{
 									white_0306 = 6;
 								}
-								else if(chess_board[(gx+3)+','+(gy+3)] == 'white')
+								else if(chess_board[(gx+3)+','+(gy+4)] == 'white')
 								{
 									white_0306 = 7;
 								}
+								else
+								{
+									white_0306 = -7;
+								}
 							}
 						}
-
-						if(black_0306 == 5)
+					}
+					else
+					{
+						if(gx+2 > 14 || gy+2 > 14 || chess_board[(gx+2)+','+(gy+2)] == 'white')
 						{
-							if(gx+3 < 15 && gy+3 < 15)
+							black_0306 = 2;
+						}
+						else
+						{
+							if(typeof(chess_board[(gx+2)+','+(gy+2)]) == 'undefined')
 							{
-								if(typeof(chess_board[(gx+3)+','+(gy+3)]) == 'undefined')
+								if(gx+3 > 14 || gy+3 > 14 || chess_board[(gx+3)+','+(gy+3)] == 'white')
+								{
+									black_0306 = -5;
+								}
+								else
+								{
+									black_0306 = 5;
+								}
+							}
+							else
+							{
+								if(gx+3 > 14 || gy+3 > 14 || chess_board[(gx+3)+','+(gy+3)] == 'white')
+								{
+									black_0306 = -6;
+								}
+								else if(typeof(chess_board[(gx+3)+','+(gy+3)]) ==  'undefined')
 								{
 									black_0306 = 6;
 								}
-								else if(chess_board[(gx+3)+','+(gy+3)] == 'black')
+								else if(chess_board[(gx+4)+','+(gy+4)] == 'black')
 								{
 									black_0306 = 7;
+								}
+								else
+								{
+									black_0306 = -7;
 								}
 							}
 						}
@@ -728,8 +893,8 @@ function board_grade(color,ix,iy)
 						{
 							if(gy+2 < 15)
 							{
-								white_0606 = 2;
-								black_0606 = 2;
+								white_0606 = gy+3 > 14 || chess_board[gx+','+(gy+3)] == 'black' ? -3 : 3;
+								black_0606 = gy+3 > 14 || chess_board[gx+','+(gy+3)] == 'white' ? -3 : 3;
 							}
 							else
 							{
@@ -741,11 +906,13 @@ function board_grade(color,ix,iy)
 						{
 							if(chess_board[gx+','+(gy+2)] == 'white')
 							{
-								white_0606 = 3;
+								white_0606 = gy+3 > 14 || chess_board[gx+','+(gy+3)] == 'black' ? -4 : 4;
+								black_0606 = 1;
 							}
 							else
 							{
-								black_0606 = 3;
+								black_0606 = gy+3 > 14 || chess_board[gx+','+(gy+3)] == 'white' ? -4 : 4;
+								white_0606 = 1;
 							}
 						}
 					}
@@ -754,50 +921,80 @@ function board_grade(color,ix,iy)
 				{
 					if(chess_board[gx+','+(gy+1)] == 'white')
 					{
-						white_0606 = 4;
-					}
-					else
-					{
-						black_0606 = 4;
-					}
-
-					if(typeof(chess_board[gx+','+(gy+2)]) != 'undefined')
-					{
-						if(chess_board[gx+','+(gy+2)] == 'white')
+						if(gy+2 > 14 || chess_board[gx+','+(gy+2)] == 'black')
 						{
-							white_0606 = white_0606 == 4 ? 5 : 1;
+							white_0606 = 2;
 						}
 						else
 						{
-							black_0606 = black_0606 == 4 ? 5 : 1;
-						}
-
-						if(white_0606 == 5)
-						{
-							if(gy+3 < 15)
+							if(typeof(chess_board[gx+','+(gy+2)]) == 'undefined')
 							{
-								if(typeof(chess_board[gx+','+(gy+3)]) == 'undefined')
+								if(gy+3 > 14 || chess_board[gx+','+(gy+3)] == 'black')
+								{
+									white_0606 = -5;
+								}
+								else
+								{
+									white_0606 = 5;
+								}
+							}
+							else
+							{
+								if(gy+3 > 14 || chess_board[gx+','+(gy+3)] == 'black')
+								{
+									white_0606 = -6;
+								}
+								else if(typeof(chess_board[gx+','+(gy+3)]) ==  'undefined')
 								{
 									white_0606 = 6;
 								}
-								else if(chess_board[gx+','+(gy+3)] == 'white')
+								else if(chess_board[gx+','+(gy+4)] == 'white')
 								{
 									white_0606 = 7;
 								}
+								else
+								{
+									white_0606 = -7;
+								}
 							}
 						}
-
-						if(black_0606 == 5)
+					}
+					else
+					{
+						if(gy+2 > 14 || chess_board[gx+','+(gy+2)] == 'white')
 						{
-							if(gy+3 < 15)
+							black_0606 = 2;
+						}
+						else
+						{
+							if(typeof(chess_board[gx+','+(gy+2)]) == 'undefined')
 							{
-								if(typeof(chess_board[gx+','+(gy+3)]) == 'undefined')
+								if(gy+3 > 14 || chess_board[gx+','+(gy+3)] == 'white')
+								{
+									black_0606 = -5;
+								}
+								else
+								{
+									black_0606 = 5;
+								}
+							}
+							else
+							{
+								if(gy+3 > 14 || chess_board[gx+','+(gy+3)] == 'white')
+								{
+									black_0606 = -6;
+								}
+								else if(typeof(chess_board[gx+','+(gy+3)]) ==  'undefined')
 								{
 									black_0606 = 6;
 								}
-								else if(chess_board[gx+','+(gy+3)] == 'black')
+								else if(chess_board[gx+','+(gy+4)] == 'black')
 								{
 									black_0606 = 7;
+								}
+								else
+								{
+									black_0606 = -7;
 								}
 							}
 						}
@@ -814,8 +1011,8 @@ function board_grade(color,ix,iy)
 						{
 							if(gx-2 >= 0 && gy+2 < 15)
 							{
-								white_0609 = 2;
-								black_0609 = 2;
+								white_0609 = gx-3 < 0 || gy+3 > 14 || chess_board[(gx-3)+','+(gy+3)] == 'black' ? -3 : 3;
+								black_0609 = gx-3 < 0 || gy+3 > 14 || chess_board[(gx-3)+','+(gy+3)] == 'white' ? -3 : 3;
 							}
 							else
 							{
@@ -827,11 +1024,13 @@ function board_grade(color,ix,iy)
 						{
 							if(chess_board[(gx-2)+','+(gy+2)] == 'white')
 							{
-								white_0609 = 3;
+								white_0609 = gx-3 < 0 || gy+3 > 14 || chess_board[(gx-3)+','+(gy+3)] == 'black' ? -4 : 4;
+								black_0609 = 1;
 							}
 							else
 							{
-								black_0609 = 3;
+								black_0609 = gx-3 < 0 || gy+3 > 14 || chess_board[(gx-3)+','+(gy+3)] == 'white' ? -4 : 4;
+								white_0609 = 1;
 							}
 						}
 					}
@@ -840,50 +1039,80 @@ function board_grade(color,ix,iy)
 				{
 					if(chess_board[(gx-1)+','+(gy+1)] == 'white')
 					{
-						white_0609 = 4;
-					}
-					else
-					{
-						black_0609 = 4;
-					}
-
-					if(typeof(chess_board[(gx-2)+','+(gy+2)]) != 'undefined')
-					{
-						if(chess_board[(gx-2)+','+(gy+2)] == 'white')
+						if(gx-2 < 0 || gy+2 > 14 || chess_board[(gx-2)+','+(gy+2)] == 'black')
 						{
-							white_0609 = white_0609 == 4 ? 5 : 1;
+							white_0609 = 2;
 						}
 						else
 						{
-							black_0609 = black_0609 == 4 ? 5 : 1;
-						}
-
-						if(white_0609 == 5)
-						{
-							if(gx-3 >= 0 && gy+3 < 15)
+							if(typeof(chess_board[(gx-2)+','+(gy+2)]) == 'undefined')
 							{
-								if(typeof(chess_board[(gx-3)+','+(gy+3)]) == 'undefined')
+								if(gx-3 < 0 || gy+3 > 14 || chess_board[(gx-3)+','+(gy+3)] == 'black')
+								{
+									white_0609 = -5;
+								}
+								else
+								{
+									white_0609 = 5;
+								}
+							}
+							else
+							{
+								if(gx-3 < 0 || gy+3 > 14 || chess_board[(gx-3)+','+(gy+3)] == 'black')
+								{
+									white_0609 = -6;
+								}
+								else if(typeof(chess_board[(gx-3)+','+(gy+3)]) ==  'undefined')
 								{
 									white_0609 = 6;
 								}
-								else if(chess_board[(gx-3)+','+(gy+3)] == 'white')
+								else if(chess_board[(gx-3)+','+(gy+4)] == 'white')
 								{
 									white_0609 = 7;
 								}
+								else
+								{
+									white_0609 = -7;
+								}
 							}
 						}
-
-						if(black_0609 == 5)
+					}
+					else
+					{
+						if(gx-2 < 0 || gy+2 > 14 || chess_board[(gx-2)+','+(gy+2)] == 'white')
 						{
-							if(gx-3 >= 0 && gy+3 < 15)
+							black_0609 = 2;
+						}
+						else
+						{
+							if(typeof(chess_board[(gx-2)+','+(gy+2)]) == 'undefined')
 							{
-								if(typeof(chess_board[(gx-3)+','+(gy+3)]) == 'undefined')
+								if(gx-3 < 0 || gy+3 > 14 || chess_board[(gx-3)+','+(gy+3)] == 'white')
+								{
+									black_0609 = -5;
+								}
+								else
+								{
+									black_0609 = 5;
+								}
+							}
+							else
+							{
+								if(gx-3 < 0 || gy+3 > 14 || chess_board[(gx-3)+','+(gy+3)] == 'white')
+								{
+									black_0609 = -6;
+								}
+								else if(typeof(chess_board[(gx-3)+','+(gy+3)]) ==  'undefined')
 								{
 									black_0609 = 6;
 								}
-								else if(chess_board[(gx-3)+','+(gy+3)] == 'black')
+								else if(chess_board[(gx-4)+','+(gy+4)] == 'black')
 								{
 									black_0609 = 7;
+								}
+								else
+								{
+									black_0609 = -7;
 								}
 							}
 						}
@@ -900,8 +1129,8 @@ function board_grade(color,ix,iy)
 						{
 							if(gx-2 >= 0)
 							{
-								white_0909 = 2;
-								black_0909 = 2;
+								white_0909 = gx-3 < 0 || chess_board[(gx-3)+','+gy] == 'black' ? -3 : 3;
+								black_0909 = gx-3 < 0 || chess_board[(gx-3)+','+gy] == 'white' ? -3 : 3;
 							}
 							else
 							{
@@ -913,11 +1142,13 @@ function board_grade(color,ix,iy)
 						{
 							if(chess_board[(gx-2)+','+gy] == 'white')
 							{
-								white_0909 = 3;
+								white_0909 = gy-3 < 0 || chess_board[(gx-3)+','+gy] == 'black' ? -4 : 4;
+								black_0909 = 1;
 							}
 							else
 							{
-								black_0909 = 3;
+								black_0909 = gx-3 < 0 || chess_board[(gx-3)+','+gy] == 'white' ? -4 : 4;
+								white_0909 = 1;
 							}
 						}
 					}
@@ -926,50 +1157,80 @@ function board_grade(color,ix,iy)
 				{
 					if(chess_board[(gx-1)+','+gy] == 'white')
 					{
-						white_0909 = 4;
-					}
-					else
-					{
-						black_0909 = 4;
-					}
-
-					if(typeof(chess_board[(gx-2)+','+gy]) != 'undefined')
-					{
-						if(chess_board[(gx-2)+','+gy] == 'white')
+						if(gx-2 < 0 || chess_board[(gx-2)+','+gy] == 'black')
 						{
-							white_0909 = white_0909 == 4 ? 5 : 1;
+							white_0909 = 2;
 						}
 						else
 						{
-							black_0909 = black_0909 == 4 ? 5 : 1;
-						}
-
-						if(white_0909 == 5)
-						{
-							if(gx-3 >= 0)
+							if(typeof(chess_board[(gx-2)+','+gy]) == 'undefined')
 							{
-								if(typeof(chess_board[(gx-3)+','+gy]) == 'undefined')
+								if(gx-3 < 0 || chess_board[(gx-3)+','+gy] == 'black')
+								{
+									white_0909 = -5;
+								}
+								else
+								{
+									white_0909 = 5;
+								}
+							}
+							else
+							{
+								if(gx-3 < 0 || chess_board[(gx-3)+','+gy] == 'black')
+								{
+									white_0909 = -6;
+								}
+								else if(typeof(chess_board[(gx-3)+','+gy]) ==  'undefined')
 								{
 									white_0909 = 6;
 								}
-								else if(chess_board[(gx-3)+','+gy] == 'white')
+								else if(chess_board[(gx-4)+','+gy] == 'white')
 								{
 									white_0909 = 7;
 								}
+								else
+								{
+									white_0909 = -7;
+								}
 							}
 						}
-
-						if(black_0909 == 5)
+					}
+					else
+					{
+						if(gx-2 < 0 || chess_board[(gx-2)+','+gy] == 'white')
 						{
-							if(gx-3 >= 0)
+							black_0909 = 2;
+						}
+						else
+						{
+							if(typeof(chess_board[(gx-2)+','+gy]) == 'undefined')
 							{
-								if(typeof(chess_board[(gx-3)+','+gy]) == 'undefined')
+								if(gx-3 < 0 || chess_board[(gx-3)+','+gy] == 'white')
+								{
+									black_0909 = -5;
+								}
+								else
+								{
+									black_0909 = 5;
+								}
+							}
+							else
+							{
+								if(gx-3 < 0 || chess_board[(gx-3)+','+gy] == 'white')
+								{
+									black_0909 = -6;
+								}
+								else if(typeof(chess_board[(gx-3)+','+gy]) ==  'undefined')
 								{
 									black_0909 = 6;
 								}
-								else if(chess_board[(gx-3)+','+gy] == 'black')
+								else if(chess_board[(gx-4)+','+gy] == 'black')
 								{
 									black_0909 = 7;
+								}
+								else
+								{
+									black_0909 = -7;
 								}
 							}
 						}
@@ -986,8 +1247,8 @@ function board_grade(color,ix,iy)
 						{
 							if(gx-2 >= 0 && gy-2 >= 0)
 							{
-								white_0912 = 2;
-								black_0912 = 2;
+								white_0912 = gx-3 < 0 || gy-3 < 0 || chess_board[(gx-3)+','+(gy-3)] == 'black' ? -3 : 3;
+								black_0912 = gx-3 < 0 || gy-3 < 0 || chess_board[(gx-3)+','+(gy-3)] == 'white' ? -3 : 3;
 							}
 							else
 							{
@@ -999,11 +1260,13 @@ function board_grade(color,ix,iy)
 						{
 							if(chess_board[(gx-2)+','+(gy-2)] == 'white')
 							{
-								white_0912 = 3;
+								white_0912 = gx-3 < 0 || gy-3 < 0 || chess_board[(gx-3)+','+(gy-3)] == 'black' ? -4 : 4;
+								black_0912 = 1;
 							}
 							else
 							{
-								black_0912 = 3;
+								black_0912 = gx-3 < 0 || gy-3 < 0 || chess_board[(gx-3)+','+(gy-3)] == 'white' ? -4 : 4;
+								white_0912 = 1;
 							}
 						}
 					}
@@ -1012,350 +1275,422 @@ function board_grade(color,ix,iy)
 				{
 					if(chess_board[(gx-1)+','+(gy-1)] == 'white')
 					{
-						white_0912 = 4;
-					}
-					else
-					{
-						black_0912 = 4;
-					}
-
-					if(typeof(chess_board[(gx-2)+','+(gy-2)]) != 'undefined')
-					{
-						if(chess_board[(gx-2)+','+(gy-2)] == 'white')
+						if(gx-2 < 0 || gy-2 < 0 || chess_board[(gx-2)+','+(gy-2)] == 'black')
 						{
-							white_0912 = white_0912 == 4 ? 5 : 1;
+							white_0912 = 2;
 						}
 						else
 						{
-							black_0912 = black_0912 == 4 ? 5 : 1;
-						}
-
-						if(white_0912 == 5)
-						{
-							if(gx-3 >= 0 && gy-3 >= 0)
+							if(typeof(chess_board[(gx-2)+','+(gy-2)]) == 'undefined')
 							{
-								if(typeof(chess_board[(gx-3)+','+(gy-3)]) == 'undefined')
+								if(gx-3 < 0 || gy-3 < 0 || chess_board[(gx-3)+','+(gy-3)] == 'black')
+								{
+									white_0912 = -5;
+								}
+								else
+								{
+									white_0912 = 5;
+								}
+							}
+							else
+							{
+								if(gx-3 < 0 || gy-3 < 0 || chess_board[(gx-3)+','+(gy-3)] == 'black')
+								{
+									white_0912 = -6;
+								}
+								else if(typeof(chess_board[(gx-3)+','+(gy-3)]) ==  'undefined')
 								{
 									white_0912 = 6;
 								}
-								else if(chess_board[(gx-3)+','+(gy-3)] == 'white')
+								else if(chess_board[(gx-3)+','+(gy-4)] == 'white')
 								{
 									white_0912 = 7;
 								}
+								else
+								{
+									white_0912 = -7;
+								}
 							}
 						}
-
-						if(black_0912 == 5)
+					}
+					else
+					{
+						if(gx-2 < 0 || gy-2 < 0 || chess_board[(gx-2)+','+(gy-2)] == 'white')
 						{
-							if(gx-3 >= 0 && gy-3 >= 0)
+							black_0912 = 2;
+						}
+						else
+						{
+							if(typeof(chess_board[(gx-2)+','+(gy-2)]) == 'undefined')
 							{
-								if(typeof(chess_board[(gx-3)+','+(gy-3)]) == 'undefined')
+								if(gx-3 < 0 || gy-3 < 0 || chess_board[(gx-3)+','+(gy-3)] == 'white')
+								{
+									black_0912 = -5;
+								}
+								else
+								{
+									black_0912 = 5;
+								}
+							}
+							else
+							{
+								if(gx-3 < 0 || gy-3 < 0 || chess_board[(gx-3)+','+(gy-3)] == 'white')
+								{
+									black_0912 = -6;
+								}
+								else if(typeof(chess_board[(gx-3)+','+(gy-3)]) ==  'undefined')
 								{
 									black_0912 = 6;
 								}
-								else if(chess_board[(gx-3)+','+(gy-3)] == 'black')
+								else if(chess_board[(gx-4)+','+(gy-4)] == 'black')
 								{
 									black_0912 = 7;
+								}
+								else
+								{
+									black_0912 = -7;
 								}
 							}
 						}
 					}
 				}
 
-				// summary
+				// full 31 situations, but...
+				// x   0  // |->|  x   0   0  0
+				// _x  1  // |->|  _x  1   1  0
+				// +x  2  // |->|  +x  2   1  0
+				// __x 3  // |->|  __x 3   2  0
+				// _+x 4  // |->|  _+x 4   2  1
+				// +_x 5  // |->|  +_x 5   2  1
+				// ++x 6  // |->|  ++x 6   2  2
+				// ___ 7  // |->|  ___ 7  3:4 0
+				// __+ 8  // |->|  __+ 8  3:4 1:2
+				// _+_ 9  // |->|  _+_ 9  3:4 1
+				// +__ 10 // |->|  +__ 10 3:4 1
+				// +_+ 11 // |->|  +_+ 11 3:4 1:2
+				// _++ 12 // |->|  _++ 12 3:4 2:3
+				// ++_ 13 // |->|  ++_ 13 3:4 2
+				// +++ 14 // |->|  +++ 14 3:4 3:4
 
-				// console.log(gx+','+gy+':summary:white_1212:'+white_1212);
-				// console.log(gx+','+gy+':summary:white_1203:'+white_1203);
-				// console.log(gx+','+gy+':summary:white_0303:'+white_0303);
-				// console.log(gx+','+gy+':summary:white_0306:'+white_0306);
-				// console.log(gx+','+gy+':summary:white_0606:'+white_0606);
-				// console.log(gx+','+gy+':summary:white_0609:'+white_0609);
-				// console.log(gx+','+gy+':summary:white_0909:'+white_0909);
-				// console.log(gx+','+gy+':summary:white_0912:'+white_0912);
+				// but...
+				// x    0
+				// _x   1
+				// +x   2
+				// __  ±3  x -3 | __x       -3 | ___/__+ 3
+				// _+  ±4  x -4 | _+x       -4 | _+_/_++ 4
+				// +_  ±5  x -5 | +_x       -5 | +__/+_+ 5
+				// ++  ±6  x -6 | ++x       -6 | ++_     6
+				// +++ ±7  +  7 | +++x/+++_ -7 | ++++    7
 
-				// console.log(gx+','+gy+':summary:black_1212:'+black_1212);
-				// console.log(gx+','+gy+':summary:black_1203:'+black_1203);
-				// console.log(gx+','+gy+':summary:black_0303:'+black_0303);
-				// console.log(gx+','+gy+':summary:black_0306:'+black_0306);
-				// console.log(gx+','+gy+':summary:black_0606:'+black_0606);
-				// console.log(gx+','+gy+':summary:black_0609:'+black_0609);
-				// console.log(gx+','+gy+':summary:black_0909:'+black_0909);
-				// console.log(gx+','+gy+':summary:black_0912:'+black_0912);
+				// special points ^-^ 2^
+				//  1 or 2 multiply by -6 ~ -3 is 0
+				//  x_#+_  1x5=5      x4
+				//  __#+_  3x5=15     x4
+				//  _+#+_  5x5=25     x8
+				//  __#++  3x6=18     x8
+				//  _+#++  5x6=30     x16
+				//  x_#+++ 1x7=7  x-7 x16
+				//  __#+++ 3x7=21 x-7 x16
+				//  +_#+++ 4x7=28 x-7 x16
+				//  ++#++  6x6=36     x32 final
+				//  x_#+++ 1x7=7  + 7 x32 final
+				//  x+#+++ 2x7=14     x32 final
+				//  __#+++ 3x7=21 + 7 x32 final
+				//  +_#+++ 4x7=28 + 7 x32 final
+				//  _+#+++ 5x7=35     x32 final
+				//  ++#+++ 6x7=42     x32 final
+				// +++#+++ 7x7=49     x32 final
 
-				// normal
+				// for white
 
-				// white_1212 *= white_0606;
-				// white_1203 *= white_0609;
-				// white_0303 *= white_0909;
-				// white_0306 *= white_0912;
-
-				// black_1212 *= black_0606;
-				// black_1203 *= black_0609;
-				// black_0303 *= black_0909;
-				// black_0306 *= black_0912;
-
-				// hard mode ^-^
-
-				// ?@+#++& 1x6=6    x2
-				// ?@&#++& 1x6=6    x2
-				// ?&&#++& 2x6=12   x4
-				// ?&+#+&? 4x4=16   x4
-				// ?&+#++x 4x5=20 ? x2
-				// ?&+#++& 4x6=24 * x8  final
-				// x++#++x 5x5=25 * x16 final
-				// x++#++& 5x6=30 * x16 final
-				// &++#++& 6x6=36 * x16 final
-				// &++#+++ 6x7=42 * x16 final
-				// ?@+#+++ 1x7=7  * x16 final
-				// ?&+#+++ 4x7=28 * x16 final
-				// +++#+++ 7x7=49 * x16 final
-
-				// console.log('switch:white:'+gx+','+gy+':1212-0606:'+(white_1212+white_0606)+','+(white_1212*white_0606));
-				// console.log('switch:white:'+gx+','+gy+':1212-0606:'+(white_1203+white_0609)+','+(white_1203*white_0609));
-				// console.log('switch:white:'+gx+','+gy+':1212-0606:'+(white_0303+white_0909)+','+(white_0303*white_0909));
-				// console.log('switch:white:'+gx+','+gy+':1212-0606:'+(white_0306+white_0912)+','+(white_0306*white_0912));
-
-				// console.log('switch:black:'+gx+','+gy+':1212-0606:'+(black_1212+black_0606)+','+(black_1212*black_0606));
-				// console.log('switch:black:'+gx+','+gy+':1212-0606:'+(black_1203+black_0609)+','+(black_1203*black_0609));
-				// console.log('switch:black:'+gx+','+gy+':1212-0606:'+(black_0303+black_0909)+','+(black_0303*black_0909));
-				// console.log('switch:black:'+gx+','+gy+':1212-0606:'+(black_0306+black_0912)+','+(black_0306*black_0912));
-
-				// 不知道为什么switch处理非常有问题，fuck
-
-				// switch((white_1212+white_0606)+','+(white_1212*white_0606))
-				// {
-				// 	case '7,6': case '9,20':  white_1212 *= white_0606*2; break;
-				// 	case '8,12': case '8,16': white_1212 *= white_0606*4; break;
-				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': white_1212 *= white_0606*8; white_final.push(gx+','+gy); break;
-				// 	default: white_1212 *= white_0606; break;
-				// }
-				// switch((white_1203+white_0609)+','+(white_1203+white_0609))
-				// {
-				// 	case '7,6': case '9,20':  white_1203 *= white_0609*2; break;
-				// 	case '8,12': case '8,16': white_1203 *= white_0609*4; break;
-				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': white_1203 *= white_0609*8; white_final.push(gx+','+gy); break;
-				// 	default: white_1203 *= white_0609; break;
-				// }
-				// switch((white_0303+white_0909)+','+(white_0303+white_0909))
-				// {
-				// 	case '7,6': case '9,20':  white_0303 *= white_0909*2; break;
-				// 	case '8,12': case '8,16': white_0303 *= white_0909*4; break;
-				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': white_0303 *= white_0909*8; white_final.push(gx+','+gy); break;
-				// 	default: white_0303 *= white_0909; break;
-				// }
-				// switch((white_0306+white_0912)+','+(white_0306+white_0912))
-				// {
-				// 	case '7,6': case '9,20':  white_0306 *= white_0912*2; break;
-				// 	case '8,12': case '8,16': white_0306 *= white_0912*4; break;
-				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': white_0306 *= white_0912*8; white_final.push(gx+','+gy); break;
-				// 	default: white_0306 *= white_0912; break;
-				// }
-
-				// switch((black_1212+black_0606)+','+(black_1212*black_0606))
-				// {
-				// 	case '7,6': case '9,20':  black_1212 *= black_0606*2; break;
-				// 	case '8,12': case '8,16': black_1212 *= black_0606*4; break;
-				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': black_1212 *= black_0606*8; black_final.push(gx+','+gy); break;
-				// 	default: black_1212 *= black_0606; break;
-				// }
-				// switch((black_1203+black_0609)+','+(black_1203+black_0609))
-				// {
-				// 	case '7,6': case '9,20':  black_1203 *= black_0609*2; break;
-				// 	case '8,12': case '8,16': black_1203 *= black_0609*4; break;
-				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': black_1203 *= black_0609*8; black_final.push(gx+','+gy); break;
-				// 	default: black_1203 *= black_0609; break;
-				// }
-				// switch((black_0303+black_0909)+','+(black_0303+black_0909))
-				// {
-				// 	case '7,6': case '9,20':  black_0303 *= black_0909*2; break;
-				// 	case '8,12': case '8,16': black_0303 *= black_0909*4; break;
-				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': black_0303 *= black_0909*8; black_final.push(gx+','+gy); break;
-				// 	default: black_0303 *= black_0909; break;
-				// }
-				// switch((black_0306+black_0912)+','+(black_0306+black_0912))
-				// {
-				// 	case '7,6': case '9,20':  black_0306 *= black_0912*2; break;
-				// 	case '8,12': case '8,16': black_0306 *= black_0912*4; break;
-				// 	case '10,24': case '10,25': case '11,30': case '12,36': case '13,42': case '8,7': case '11,28': case '14,49': black_0306 *= black_0912*8; black_final.push(gx+','+gy); break;
-				// 	default: black_0306 *= black_0912; break;
-				// }
-
-				fuck_jssss = (white_1212+white_0606)+','+(white_1212*white_0606);
-				if(in_array(fuck_jssss,['7,6','9,20']))
+				if(boolean_grade(white_1212,white_0606,[-6,-5,-4,-3],[1,2]))
 				{
-					white_1212 *= white_0606*2;
+					white_1212 = 0;
 				}
-				else if(in_array(fuck_jssss,['8,12','8,16']))
+				else if(boolean_grade(white_1212,white_0606,['1,5','-5,1','3,5','-5,3']))
 				{
-					white_1212 *= white_0606*4;
+					white_1212 = Math.abs(white_1212*white_0606)*4;
 				}
-				else if(fuck_jssss == '10,24')
+				else if(boolean_grade(white_1212,white_0606,['5,5','-5,5','-5,-5','3,6','-3,6']))
 				{
-					white_1212 *= white_0606*8;
+					white_1212 = Math.abs(white_1212*white_0606)*8;
 				}
-				else if(in_array(fuck_jssss,['10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
+				else if(boolean_grade(white_1212,white_0606,['-7,1','-7,3','-7,4']))
 				{
-					white_1212 *= white_0606*16;
+					white_1212 = Math.abs(white_1212*white_0606)*16;
+				}
+				else if(boolean_grade(white_1212,white_0606,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
+				{
+					white_1212 = Math.abs(white_1212*white_0606)*32;
 					white_final.push(gx+','+gy);
 				}
 				else
 				{
-					white_1212 *= white_0606;
-				}
-				fuck_jssss = (white_1203+white_0609)+','+(white_1203*white_0609);
-				if(in_array(fuck_jssss,['7,6','9,20']))
-				{
-					white_1203 *= white_0609*2;
-				}
-				else if(in_array(fuck_jssss,['8,12','8,16']))
-				{
-					white_1203 *= white_0609*4;
-				}
-				else if(fuck_jssss == '10,24')
-				{
-					white_1203 *= white_0609*8;
-				}
-				else if(in_array(fuck_jssss,['10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
-				{
-					white_1203 *= white_0609*16;
-					white_final.push(gx+','+gy);
-				}
-				else
-				{
-					white_1203 *= white_0609;
-				}
-				fuck_jssss = (white_0303+white_0909)+','+(white_0303*white_0909);
-				if(in_array(fuck_jssss,['7,6','9,20']))
-				{
-					white_0303 *= white_0909*2;
-				}
-				else if(in_array(fuck_jssss,['8,12','8,16']))
-				{
-					white_0303 *= white_0909*4;
-				}
-				else if(fuck_jssss == '10,24')
-				{
-					white_0303 *= white_0909*8;
-				}
-				else if(in_array(fuck_jssss,['10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
-				{
-					white_0303 *= white_0909*16;
-					white_final.push(gx+','+gy);
-				}
-				else
-				{
-					white_0303 *= white_0909;
-				}
-				fuck_jssss = (white_0306+white_0912)+','+(white_0306*white_0912);
-				if(in_array(fuck_jssss,['7,6','9,20']))
-				{
-					white_0306 *= white_0912*2;
-				}
-				else if(in_array(fuck_jssss,['8,12','8,16']))
-				{
-					white_0306 *= white_0912*4;
-				}
-				else if(fuck_jssss == '10,24')
-				{
-					white_0306 *= white_0912*8;
-				}
-				else if(in_array(fuck_jssss,['10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
-				{
-					white_0306 *= white_0912*16;
-					white_final.push(gx+','+gy);
-				}
-				else
-				{
-					white_0306 *= white_0912;
+					white_1212 = Math.abs(white_1212);
+					white_0606 = Math.abs(white_0606);
+					if(boolean_grade(white_1212,white_0606,['6,6','5,7','6,7','7,7']))
+					{
+						white_1212 *= white_0606*32;
+						white_final.push(gx+','+gy);
+					}
+					else
+					{
+						white_1212 *= white_0606;
+					}
 				}
 
-				fuck_jssss = (black_1212+black_0606)+','+(black_1212*black_0606);
-				if(in_array(fuck_jssss,['7,6','9,20']))
+				if(boolean_grade(white_1203,white_0609,[-6,-5,-4,-3],[1,2]))
 				{
-					black_1212 *= black_0606*2;
+					white_1203 = 0;
 				}
-				else if(in_array(fuck_jssss,['8,12','8,16']))
+				else if(boolean_grade(white_1203,white_0609,['1,5','-5,1','3,5','-5,3']))
 				{
-					black_1212 *= black_0606*4;
+					white_1203 = Math.abs(white_1203*white_0609)*4;
 				}
-				else if(fuck_jssss == '10,24')
+				else if(boolean_grade(white_1203,white_0609,['5,5','-5,5','-5,-5','3,6','-3,6']))
 				{
-					black_1212 *= black_0606*8;
+					white_1203 = Math.abs(white_1203*white_0609)*8;
 				}
-				else if(in_array(fuck_jssss,['10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
+				else if(boolean_grade(white_1203,white_0609,['-7,1','-7,3','-7,4']))
 				{
-					black_1212 *= black_0606*16;
+					white_1203 = Math.abs(white_1203*white_0609)*16;
+				}
+				else if(boolean_grade(white_1203,white_0609,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
+				{
+					white_1203 = Math.abs(white_1203*white_0609)*32;
+					white_final.push(gx+','+gy);
+				}
+				else
+				{
+					white_1203 = Math.abs(white_1203);
+					white_0609 = Math.abs(white_0609);
+					if(boolean_grade(white_1203,white_0609,['6,6','5,7','6,7','7,7']))
+					{
+						white_1203 *= white_0609*32;
+						white_final.push(gx+','+gy);
+					}
+					else
+					{
+						white_1203 *= white_0609;
+					}
+				}
+
+				if(boolean_grade(white_0303,white_0909,[-6,-5,-4,-3],[1,2]))
+				{
+					white_0303 = 0;
+				}
+				else if(boolean_grade(white_0303,white_0909,['1,5','-5,1','3,5','-5,3']))
+				{
+					white_0303 = Math.abs(white_0303*white_0909)*4;
+				}
+				else if(boolean_grade(white_0303,white_0909,['5,5','-5,5','-5,-5','3,6','-3,6']))
+				{
+					white_0303 = Math.abs(white_0303*white_0909)*8;
+				}
+				else if(boolean_grade(white_0303,white_0909,['-7,1','-7,3','-7,4']))
+				{
+					white_0303 = Math.abs(white_0303*white_0909)*16;
+				}
+				else if(boolean_grade(white_0303,white_0909,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
+				{
+					white_0303 = Math.abs(white_0303*white_0909)*32;
+					white_final.push(gx+','+gy);
+				}
+				else
+				{
+					white_0303 = Math.abs(white_0303);
+					white_0909 = Math.abs(white_0909);
+					if(boolean_grade(white_0303,white_0909,['6,6','5,7','6,7','7,7']))
+					{
+						white_0303 *= white_0909*32;
+						white_final.push(gx+','+gy);
+					}
+					else
+					{
+						white_0303 *= white_0909;
+					}
+				}
+
+				if(boolean_grade(white_0306,white_0912,[-6,-5,-4,-3],[1,2]))
+				{
+					white_0306 = 0;
+				}
+				else if(boolean_grade(white_0306,white_0912,['1,5','-5,1','3,5','-5,3']))
+				{
+					white_0306 = Math.abs(white_0306*white_0912)*4;
+				}
+				else if(boolean_grade(white_0306,white_0912,['5,5','-5,5','-5,-5','3,6','-3,6']))
+				{
+					white_0306 = Math.abs(white_0306*white_0912)*8;
+				}
+				else if(boolean_grade(white_0306,white_0912,['-7,1','-7,3','-7,4']))
+				{
+					white_0306 = Math.abs(white_0306*white_0912)*16;
+				}
+				else if(boolean_grade(white_0306,white_0912,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
+				{
+					white_0306 = Math.abs(white_0306*white_0912)*32;
+					white_final.push(gx+','+gy);
+				}
+				else
+				{
+					white_0306 = Math.abs(white_0306);
+					white_0912 = Math.abs(white_0912);
+					if(boolean_grade(white_0306,white_0912,['6,6','5,7','6,7','7,7']))
+					{
+						white_0306 *= white_0912*32;
+						white_final.push(gx+','+gy);
+					}
+					else
+					{
+						white_0306 *= white_0912;
+					}
+				}
+
+				// for black
+
+				if(boolean_grade(black_1212,black_0606,[-6,-5,-4,-3],[1,2]))
+				{
+					black_1212 = 0;
+				}
+				else if(boolean_grade(black_1212,black_0606,['1,5','-5,1','3,5','-5,3']))
+				{
+					black_1212 = Math.abs(black_1212*black_0606)*4;
+				}
+				else if(boolean_grade(black_1212,black_0606,['5,5','-5,5','-5,-5','3,6','-3,6']))
+				{
+					black_1212 = Math.abs(black_1212*black_0606)*8;
+				}
+				else if(boolean_grade(black_1212,black_0606,['-7,1','-7,3','-7,4']))
+				{
+					black_1212 = Math.abs(black_1212*black_0606)*16;
+				}
+				else if(boolean_grade(black_1212,black_0606,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
+				{
+					black_1212 = Math.abs(black_1212*black_0606)*32;
 					black_final.push(gx+','+gy);
 				}
 				else
 				{
-					black_1212 *= black_0606;
+					black_1212 = Math.abs(black_1212);
+					black_0606 = Math.abs(black_0606);
+					if(boolean_grade(black_1212,black_0606,['6,6','5,7','6,7','7,7']))
+					{
+						black_1212 *= black_0606*32;
+						black_final.push(gx+','+gy);
+					}
+					else
+					{
+						black_1212 *= black_0606;
+					}
 				}
-				fuck_jssss = (black_1203+black_0609)+','+(black_1203*black_0609);
-				if(in_array(fuck_jssss,['7,6','9,20']))
+
+				if(boolean_grade(black_1203,black_0609,[-6,-5,-4,-3],[1,2]))
 				{
-					black_1203 *= black_0609*2;
+					black_1203 = 0;
 				}
-				else if(in_array(fuck_jssss,['8,12','8,16']))
+				else if(boolean_grade(black_1203,black_0609,['1,5','-5,1','3,5','-5,3']))
 				{
-					black_1203 *= black_0609*4;
+					black_1203 = Math.abs(black_1203*black_0609)*4;
 				}
-				else if(fuck_jssss == '10,24')
+				else if(boolean_grade(black_1203,black_0609,['5,5','-5,5','-5,-5','3,6','-3,6']))
 				{
-					black_1203 *= black_0609*8;
+					black_1203 = Math.abs(black_1203*black_0609)*8;
 				}
-				else if(in_array(fuck_jssss,['10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
+				else if(boolean_grade(black_1203,black_0609,['-7,1','-7,3','-7,4']))
 				{
-					black_1203 *= black_0609*16;
+					black_1203 = Math.abs(black_1203*black_0609)*16;
+				}
+				else if(boolean_grade(black_1203,black_0609,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
+				{
+					black_1203 = Math.abs(black_1203*black_0609)*32;
 					black_final.push(gx+','+gy);
 				}
 				else
 				{
-					black_1203 *= black_0609;
+					black_1203 = Math.abs(black_1203);
+					black_0609 = Math.abs(black_0609);
+					if(boolean_grade(black_1203,black_0609,['6,6','5,7','6,7','7,7']))
+					{
+						black_1203 *= black_0609*32;
+						black_final.push(gx+','+gy);
+					}
+					else
+					{
+						black_1203 *= black_0609;
+					}
 				}
-				fuck_jssss = (black_0303+black_0909)+','+(black_0303*black_0909);
-				if(in_array(fuck_jssss,['7,6','9,20']))
+
+				if(boolean_grade(black_0303,black_0909,[-6,-5,-4,-3],[1,2]))
 				{
-					black_0303 *= black_0909*2;
+					black_0303 = 0;
 				}
-				else if(in_array(fuck_jssss,['8,12','8,16']))
+				else if(boolean_grade(black_0303,black_0909,['1,5','-5,1','3,5','-5,3']))
 				{
-					black_0303 *= black_0909*4;
+					black_0303 = Math.abs(black_0303*black_0909)*4;
 				}
-				else if(fuck_jssss == '10,24')
+				else if(boolean_grade(black_0303,black_0909,['5,5','-5,5','-5,-5','3,6','-3,6']))
 				{
-					black_0303 *= black_0909*8;
+					black_0303 = Math.abs(black_0303*black_0909)*8;
 				}
-				else if(in_array(fuck_jssss,['10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
+				else if(boolean_grade(black_0303,black_0909,['-7,1','-7,3','-7,4']))
 				{
-					black_0303 *= black_0909*16;
+					black_0303 = Math.abs(black_0303*black_0909)*16;
+				}
+				else if(boolean_grade(black_0303,black_0909,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
+				{
+					black_0303 = Math.abs(black_0303*black_0909)*32;
 					black_final.push(gx+','+gy);
 				}
 				else
 				{
-					black_0303 *= black_0909;
+					black_0303 = Math.abs(black_0303);
+					black_0909 = Math.abs(black_0909);
+					if(boolean_grade(black_0303,black_0909,['6,6','5,7','6,7','7,7']))
+					{
+						black_0303 *= black_0909*32;
+						black_final.push(gx+','+gy);
+					}
+					else
+					{
+						black_0303 *= black_0909;
+					}
 				}
-				fuck_jssss = (black_0306+black_0912)+','+(black_0306*black_0912);
-				if(in_array(fuck_jssss,['7,6','9,20']))
+
+				if(boolean_grade(black_0306,black_0912,[-6,-5,-4,-3],[1,2]))
 				{
-					black_0306 *= black_0912*2;
+					black_0306 = 0;
 				}
-				else if(in_array(fuck_jssss,['8,12','8,16']))
+				else if(boolean_grade(black_0306,black_0912,['1,5','-5,1','3,5','-5,3']))
 				{
-					black_0306 *= black_0912*4;
+					black_0306 = Math.abs(black_0306*black_0912)*4;
 				}
-				else if(fuck_jssss == '10,24')
+				else if(boolean_grade(black_0306,black_0912,['5,5','-5,5','-5,-5','3,6','-3,6']))
 				{
-					black_0306 *= black_0912*8;
+					black_0306 = Math.abs(black_0306*black_0912)*8;
 				}
-				else if(in_array(fuck_jssss,['10,25','11,30','12,36','13,42','8,7','11,28','14,49']))
+				else if(boolean_grade(black_0306,black_0912,['-7,1','-7,3','-7,4']))
 				{
-					black_0306 *= black_0912*16;
+					black_0306 = Math.abs(black_0306*black_0912)*16;
+				}
+				else if(boolean_grade(black_0306,black_0912,['1,7','2,7','-7,2','3,7','4,7','-3,7','-4,7']))
+				{
+					black_0306 = Math.abs(black_0306*black_0912)*32;
 					black_final.push(gx+','+gy);
 				}
 				else
 				{
-					black_0306 *= black_0912;
+					black_0306 = Math.abs(black_0306);
+					black_0912 = Math.abs(black_0912);
+					if(boolean_grade(black_0306,black_0912,['6,6','5,7','6,7','7,7']))
+					{
+						black_0306 *= black_0912*32;
+						black_final.push(gx+','+gy);
+					}
+					else
+					{
+						black_0306 *= black_0912;
+					}
 				}
 
 				// console.log(gx+','+gy+':white_1212:'+white_1212);
@@ -1910,13 +2245,12 @@ function board_guide(color)
 {
 	var white_high_score = 0;
 	var white_high_place = Array();
+
 	var black_high_score = 0;
 	var black_high_place = Array();
 
-	// console.log('white_final',white_final);
-	// console.log('white_three',white_three);
-	// console.log('black_final',black_final);
-	// console.log('black_three',black_three);
+	var point_pre = Array();
+	var point_use = Array();
 
 	if(color == 'white')
 	{
@@ -1930,7 +2264,7 @@ function board_guide(color)
 			}
 		}
 
-		if(black_final != '')
+		if(black_final.length > 0)
 		{
 			for(var k in black_final)
 			{
@@ -1976,17 +2310,60 @@ function board_guide(color)
 
 		if(white_alive.length > 0)
 		{
+			point_pre = Array();
+
 			for(var k in white_alive)
 			{
 				if(typeof(chess_board[white_alive[k][0]]) != 'undefined' || typeof(chess_board[white_alive[k][1]]) != 'undefined') continue;
 
-				if(white_board[white_alive[k][0]] > white_board[white_alive[k][1]])
+				point_pre.push(white_alive[k][0]);
+				point_pre.push(white_alive[k][1]);
+			}
+
+			if(point_pre.length > 0)
+			{
+				point_use = Array();
+
+				for(var k in point_pre)
 				{
-					return white_alive[k][0];
+					if(white_board[point_pre[k]] > white_high_score)
+					{
+						white_high_score = white_board[point_pre[k]];
+
+						point_use = Array();
+						point_use.push(point_pre[k]);
+					}
+					else if(white_board[point_pre[k]] == white_high_score)
+					{
+						point_use.push(point_pre[k]);
+					}
 				}
-				else
+
+				if(point_use.length > 0)
 				{
-					return white_alive[k][1];
+					if(point_use.length == 1)
+					{
+						return point_use[0];
+					}
+					else
+					{
+						for(var k in point_use)
+						{
+							if(black_board[point_use[k]] > black_high_score)
+							{
+								black_high_score = black_board[point_use[k]];
+
+								black_high_place = Array();
+								black_high_place.push(point_use[k]);
+							}
+							else if(black_board[point_use[k]] == black_high_score)
+							{
+								black_high_place.push(point_use[k]);
+							}
+						}
+
+						return black_high_place[Math.floor(Math.random()*black_high_place.length)];
+					}
 				}
 			}
 		}
@@ -2003,7 +2380,7 @@ function board_guide(color)
 			}
 		}
 
-		if(white_final != '')
+		if(white_final.length > 0)
 		{
 			for(var k in white_final)
 			{
@@ -2049,17 +2426,60 @@ function board_guide(color)
 
 		if(black_alive.length > 0)
 		{
+			point_pre = Array();
+
 			for(var k in black_alive)
 			{
 				if(typeof(chess_board[black_alive[k][0]]) != 'undefined' || typeof(chess_board[black_alive[k][1]]) != 'undefined') continue;
 
-				if(black_board[black_alive[k][0]] > black_board[black_alive[k][1]])
+				point_pre.push(black_alive[k][0]);
+				point_pre.push(black_alive[k][1]);
+			}
+
+			if(point_pre.length > 0)
+			{
+				point_use = Array();
+
+				for(var k in point_pre)
 				{
-					return black_alive[k][0];
+					if(black_board[point_pre[k]] > black_high_score)
+					{
+						black_high_score = black_board[point_pre[k]];
+
+						point_use = Array();
+						point_use.push(point_pre[k]);
+					}
+					else if(black_board[point_pre[k]] == black_high_score)
+					{
+						point_use.push(point_pre[k]);
+					}
 				}
-				else
+
+				if(point_use.length > 0)
 				{
-					return black_alive[k][1];
+					if(point_use.length == 1)
+					{
+						return point_use[0];
+					}
+					else
+					{
+						for(var k in point_use)
+						{
+							if(white_board[point_use[k]] > white_high_score)
+							{
+								white_high_score = white_board[point_use[k]];
+
+								white_high_place = Array();
+								white_high_place.push(point_use[k]);
+							}
+							else if(white_board[point_use[k]] == white_high_score)
+							{
+								white_high_place.push(point_use[k]);
+							}
+						}
+
+						return white_high_place[Math.floor(Math.random()*white_high_place.length)];
+					}
 				}
 			}
 		}
@@ -2095,29 +2515,133 @@ function board_guide(color)
 		}
 	}
 
-	// console.log('white:'+white_high_score);console.log(white_high_place);
-	// console.log('black:'+black_high_score);console.log(black_high_place);
+	console.log('white:'+white_high_score);console.log(white_high_place);
+	console.log('black:'+black_high_score);console.log(black_high_place);
 
 	if(color == 'white')
 	{
 		if(black_high_score > white_high_score)
 		{
-			return black_high_place[Math.floor(Math.random()*black_high_place.length)];
+			if(black_high_place.length == 1)
+			{
+				return black_high_place[0];
+			}
+			else
+			{
+				point_use = Array();
+
+				white_high_score = 0;
+
+				for(var k in black_high_place)
+				{
+					if(white_board[black_high_place[k]] > white_high_score)
+					{
+						white_high_score = white_board[black_high_place[k]];
+
+						point_use = Array();
+						point_use.push(black_high_place[k]);
+					}
+					else if(white_board[black_high_place[k]] == white_high_score)
+					{
+						point_use.push(black_high_place[k]);
+					}
+				}
+
+				return point_use[Math.floor(Math.random()*point_use.length)];
+			}
 		}
 		else
 		{
-			return white_high_place[Math.floor(Math.random()*white_high_place.length)];
+			if(white_high_place.length == 1)
+			{
+				return white_high_place[0];
+			}
+			else
+			{
+				point_use = Array();
+
+				black_high_score = 0;
+
+				for(var k in white_high_place)
+				{
+					if(black_board[white_high_place[k]] > black_high_score)
+					{
+						black_high_score = black_board[white_high_place[k]];
+
+						point_use = Array();
+						point_use.push(white_high_place[k]);
+					}
+					else if(black_board[white_high_place[k]] == black_high_score)
+					{
+						point_use.push(white_high_place[k]);
+					}
+				}
+
+				return point_use[Math.floor(Math.random()*point_use.length)];
+			}
 		}
 	}
 	else
 	{
 		if(white_high_score > black_high_score)
 		{
-			return white_high_place[Math.floor(Math.random()*white_high_place.length)];
+			if(white_high_place.length == 1)
+			{
+				return white_high_place[0];
+			}
+			else
+			{
+				point_use = Array();
+
+				black_high_score = 0;
+
+				for(var k in white_high_place)
+				{
+					if(black_board[white_high_place[k]] > black_high_score)
+					{
+						black_high_score = black_board[white_high_place[k]];
+
+						point_use = Array();
+						point_use.push(white_high_place[k]);
+					}
+					else if(black_board[white_high_place[k]] == black_high_score)
+					{
+						point_use.push(white_high_place[k]);
+					}
+				}
+
+				return point_use[Math.floor(Math.random()*point_use.length)];
+			}
 		}
 		else
 		{
-			return black_high_place[Math.floor(Math.random()*black_high_place.length)];
+			if(black_high_place.length == 1)
+			{
+				return black_high_place[0];
+			}
+			else
+			{
+				point_use = Array();
+
+				white_high_score = 0;
+
+				for(var k in black_high_place)
+				{
+					if(white_board[black_high_place[k]] > white_high_score)
+					{
+						white_high_score = white_board[black_high_place[k]];
+
+						point_use = Array();
+						point_use.push(black_high_place[k]);
+					}
+					else if(white_board[black_high_place[k]] == white_high_score)
+					{
+						point_use.push(black_high_place[k]);
+					}
+				}
+
+				return point_use[Math.floor(Math.random()*point_use.length)];
+			}
 		}
 	}
 }
